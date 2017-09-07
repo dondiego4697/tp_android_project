@@ -1,40 +1,31 @@
 package com.koala.infinitum.android_project
 
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
+import android.support.design.widget.TabLayout
+import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
-import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
-
-    private var mTextMessage: TextView? = null
-
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigation_home -> {
-                mTextMessage!!.setText(R.string.title_home)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_dashboard -> {
-                mTextMessage!!.setText(R.string.title_dashboard)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_notifications -> {
-                mTextMessage!!.setText(R.string.title_notifications)
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
-    }
+    private var pagerAdapter: PageAdapter? = null
+    private var viewPager: ViewPager? = null
+    private var tabLayout: TabLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        supportActionBar!!.elevation = 0F
 
-        mTextMessage = findViewById(R.id.message) as TextView
+        init()
+    }
 
-        val navigation = findViewById(R.id.navigation) as BottomNavigationView
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+    private fun init() {
+        viewPager = findViewById(R.id.container) as ViewPager?
+        tabLayout = findViewById(R.id.tabs) as TabLayout
+
+        tabLayout!!.setupWithViewPager(viewPager)
+        pagerAdapter = PageAdapter(supportFragmentManager, this)
+        viewPager!!.adapter = pagerAdapter
+        //tabLayout.getTabAt(0)!!.setIcon(R.drawable.ic_home_white_24dp)
     }
 
 }
