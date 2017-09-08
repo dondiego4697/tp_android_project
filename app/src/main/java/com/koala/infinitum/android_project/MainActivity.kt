@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         tabLayout = findViewById(R.id.tabs) as TabLayout
 
         tabLayout!!.setupWithViewPager(viewPager)
-        pagerAdapter = PageAdapter(supportFragmentManager, this)
+        pagerAdapter = PageAdapter(supportFragmentManager)
         viewPager!!.adapter = pagerAdapter
         //tabLayout.getTabAt(0)!!.setIcon(R.drawable.ic_home_white_24dp)
     }

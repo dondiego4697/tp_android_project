@@ -1,8 +1,6 @@
 package com.koala.infinitum.android_project.mainFragments.list
 
-import android.content.Context
-
-class Factory(private val context: Context) {
+class Factory {
     val Main1: ArrayList<String>
         get() {
             val result = ArrayList<String>()

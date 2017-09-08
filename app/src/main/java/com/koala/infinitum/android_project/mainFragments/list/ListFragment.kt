@@ -1,6 +1,5 @@
 package com.koala.infinitum.android_project.mainFragments.list
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -10,9 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.koala.infinitum.android_project.R
 
-class ListFragment(context: Context) : Fragment() {
+class ListFragment : Fragment() {
     private val ARG_LIST_TYPE = "LIST_TYPE"
-    private val mainFactory: Factory = Factory(context)
+    private val mainFactory: Factory = Factory()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater!!.inflate(R.layout.list_fragment, container, false)
@@ -31,8 +30,8 @@ class ListFragment(context: Context) : Fragment() {
     companion object {
         private val ARG_LIST_TYPE = "LIST_TYPE"
 
-        fun newInstance(listType: ListTypes, context: Context): ListFragment {
-            val fragment = ListFragment(context)
+        fun newInstance(listType: ListTypes): ListFragment {
+            val fragment = ListFragment()
             val args = Bundle()
             args.putSerializable(ARG_LIST_TYPE, listType)
             fragment.arguments = args
