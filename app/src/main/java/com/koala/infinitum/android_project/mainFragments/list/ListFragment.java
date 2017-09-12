@@ -24,6 +24,7 @@ public class ListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         listType = (ListTypes) getArguments().getSerializable("LIST_TYPE");
+        mainFactory = new Factory();
     }
 
     @Nullable
@@ -43,12 +44,7 @@ public class ListFragment extends Fragment {
                 break;
             }
         }
-        ListAdapter listAdapter = new ListAdapter(items, new OnItemClickListener() {
-            @Override
-            public void onItemClick(String item) {
-                Log.d("custom-logs", item);
-            }
-        });
+        ListAdapter listAdapter = new ListAdapter(items);
         recyclerView.setAdapter(listAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 

@@ -6,10 +6,10 @@ public class Factory {
     private ArrayList<String> Main1 = new ArrayList<>(), Main2 = new ArrayList<>();
 
     ArrayList<String> getMain1() {
-        Main1.add("asasd11");
-        Main1.add("asasd22");
-        Main1.add("asasd33");
-        Main1.add("asasd44");
+        Main1.add("asasd111");
+        Main1.add("asasd222");
+        Main1.add("asasd333");
+        Main1.add("asasd444");
         return Main1;
     }
 

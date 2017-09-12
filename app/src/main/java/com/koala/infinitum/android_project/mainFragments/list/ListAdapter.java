@@ -10,36 +10,29 @@ import com.koala.infinitum.android_project.R;
 
 import java.util.ArrayList;
 
-interface OnItemClickListener {
-    void onItemClick(String item);
-}
-
-public class ListAdapter extends RecyclerView.Adapter<ListItemHolder> {
+class ListAdapter extends RecyclerView.Adapter<ListItemHolder> {
     private ArrayList<String> items;
-    private OnItemClickListener onItemClickListener;
-    public ListAdapter(ArrayList<String> items, OnItemClickListener onItemClickListener) {
+
+    ListAdapter(ArrayList<String> items) {
         super();
         this.items = items;
-        this.onItemClickListener = onItemClickListener;
-        Log.d("custom-logs", "init");
     }
 
     @Override
     public ListItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
-        ListItemHolder listItemHolder = new ListItemHolder(view);
-        listItemHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onItemClickListener.onItemClick("123");
-            }
-        });
-        return listItemHolder;
+        return new ListItemHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ListItemHolder holder, int position) {
         holder.update(items.get(position));
+        holder.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int pos) {
+                Log.d("custom-logs", pos + "");
+            }
+        });
     }
 
     @Override
