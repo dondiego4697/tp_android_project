@@ -5,11 +5,24 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
+import com.koala.infinitum.android_project.httpApi.interfaces.place.IGetAll;
+import com.koala.infinitum.android_project.httpApi.models.Place;
+import com.koala.infinitum.android_project.httpApi.models.Response;
+import com.koala.infinitum.android_project.httpApi.services.PlaceService;
+
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
@@ -21,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setElevation(0);
-            //actionBar.setTitle(getResources().getString(R.string.app_name));
         }
 
         init();

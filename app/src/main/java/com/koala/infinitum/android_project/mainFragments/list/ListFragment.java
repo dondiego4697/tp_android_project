@@ -10,8 +10,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.koala.infinitum.android_project.MainActivity;
 import com.koala.infinitum.android_project.R;
+import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
+import com.koala.infinitum.android_project.httpApi.models.Place;
+import com.koala.infinitum.android_project.httpApi.models.Response;
+import com.koala.infinitum.android_project.httpApi.services.PlaceService;
 
 import java.util.ArrayList;
 
@@ -65,6 +71,22 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void onRefresh() {
-        swipeRefreshLayout.setRefreshing(false);
+        testReq();
+    }
+
+    private void testReq() {
+        new PlaceService().getAll(10, 0, true, new ClientCallback<Response<Place>>() {
+            @Override
+            public void onSuccess(retrofit2.Response<Response<Place>> response) {
+                swipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(getActivity(), response.body().getData().get(0).getPoint(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(String err) {
+                swipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(getActivity(), err, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
