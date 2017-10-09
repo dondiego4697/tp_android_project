@@ -53,6 +53,9 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 items = mainFactory.getMain2();
                 break;
             }
+            case Main3: {
+                items = mainFactory.getMain2();
+            }
         }
         ListAdapter listAdapter = new ListAdapter(items);
         recyclerView.setAdapter(listAdapter);

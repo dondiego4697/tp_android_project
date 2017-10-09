@@ -14,8 +14,9 @@ class PageAdapter extends FragmentPagerAdapter {
 
     PageAdapter(android.support.v4.app.FragmentManager fm, Context context) {
         super(fm);
-        TITLES.add(context.getResources().getString(R.string.my_events));
-        TITLES.add(context.getResources().getString(R.string.my_subsc));
+        TITLES.add(context.getResources().getString(R.string.page__my_events));
+        TITLES.add(context.getResources().getString(R.string.page__my_subsc));
+        TITLES.add(context.getResources().getString(R.string.page__global));
     }
 
     @Override
@@ -27,8 +28,11 @@ class PageAdapter extends FragmentPagerAdapter {
             case 1: {
                 return ListFragment.newInstance(ListTypes.Main2);
             }
+            case 2: {
+                return ListFragment.newInstance(ListTypes.Main3);
+            }
             default: {
-                return ListFragment.newInstance(ListTypes.Main1);
+                return ListFragment.newInstance(ListTypes.Main3);
             }
         }
     }

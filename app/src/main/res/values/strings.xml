@@ -4,6 +4,7 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="find_event">Find place</string>
-    <string name="my_events">My events</string>
-    <string name="my_subsc">Subscriptions</string>
+    <string name="page__my_events">My events</string>
+    <string name="page__my_subsc">Subscriptions</string>
+    <string name="page__global">Global</string>
 </resources>
