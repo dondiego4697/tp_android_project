@@ -3,6 +3,7 @@ package com.koala.infinitum.android_project.mainFragments.list;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,11 +15,12 @@ import com.koala.infinitum.android_project.R;
 
 import java.util.ArrayList;
 
-public class ListFragment extends Fragment {
+public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private Factory mainFactory;
     private ListTypes listType;
     RecyclerView recyclerView;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,6 +34,8 @@ public class ListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.list_fragment, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rvList);
+        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.srl);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         ArrayList<String> items = null;
         switch (listType) {
@@ -57,5 +61,10 @@ public class ListFragment extends Fragment {
         ListFragment fragment = new ListFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

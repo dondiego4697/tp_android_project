@@ -1,6 +1,9 @@
 <resources>
-    <string name="app_name">Android-project</string>
+    <string name="app_name">Urbiscor</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="find_event">Find place</string>
+    <string name="my_events">My events</string>
+    <string name="my_subsc">Subscriptions</string>
 </resources>
