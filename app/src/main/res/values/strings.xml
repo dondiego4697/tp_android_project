@@ -7,4 +7,7 @@
     <string name="page__my_events">My events</string>
     <string name="page__my_subsc">Subscriptions</string>
     <string name="page__global">Global</string>
+
+    <string name="place_item__time_start">Время встречи: %1$s</string>
+    <string name="place_item__time_created">Создано: %1$s</string>
 </resources>

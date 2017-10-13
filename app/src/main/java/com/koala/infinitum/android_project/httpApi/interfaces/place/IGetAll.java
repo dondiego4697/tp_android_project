@@ -9,5 +9,5 @@ import retrofit2.http.Query;
 
 public interface IGetAll {
     @GET("/api/place/get-all")
-    Call<Response<Place>> getData(@Query("limit") Integer limit, @Query("offset") Integer offset, @Query("desc") Boolean desc);
+    Call<Response<Place>> getData(@Query("limit") Integer limit, @Query("offset") Integer offset, @Query("desc") Boolean desc, @Query("category") String category);
 }

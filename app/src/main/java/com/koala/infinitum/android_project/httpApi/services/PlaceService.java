@@ -21,9 +21,9 @@ public class PlaceService {
         getAll = retrofit.create(IGetAll.class);
     }
 
-    public void getAll(Integer limit, Integer offset, Boolean desc, final ClientCallback<Response<Place>> clientCallback) {
+    public void getAll(Integer limit, Integer offset, Boolean desc, String category, final ClientCallback<Response<Place>> clientCallback) {
         try {
-            getAll.getData(limit, offset, desc).enqueue(new Callback<Response<Place>>() {
+            getAll.getData(limit, offset, desc, category).enqueue(new Callback<Response<Place>>() {
                 @Override
                 public void onResponse(Call<Response<Place>> call, retrofit2.Response<Response<Place>> response) {
                     if (response.body() == null) {

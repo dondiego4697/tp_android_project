@@ -6,10 +6,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.koala.infinitum.android_project.R;
@@ -25,8 +25,8 @@ public class GlobalEvents extends Fragment implements SwipeRefreshLayout.OnRefre
 
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
+    ProgressBar pbList;
     GlobalEventsListAdapter listAdapter;
-    ArrayList<Place> listData = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,37 +40,44 @@ public class GlobalEvents extends Fragment implements SwipeRefreshLayout.OnRefre
         View rootView = inflater.inflate(R.layout.fragment_global_events, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rvList);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.srl);
+        pbList = (ProgressBar) rootView.findViewById(R.id.pbList);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        listAdapter = new GlobalEventsListAdapter(listData);
+        listAdapter = new GlobalEventsListAdapter(getActivity());
 
         recyclerView.setAdapter(listAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        getAllEvents();
         return rootView;
     }
 
     @Override
     public void onRefresh() {
-        testReq();
+        getAllEvents();
     }
 
-    private void testReq() {
-        new PlaceService().getAll(10, 0, true, new ClientCallback<Response<Place>>() {
+    private void getAllEvents() {
+        listAdapter.clear();
+        setProgressBarVisibility(true);
+        new PlaceService().getAll(10, 0, true, null, new ClientCallback<Response<Place>>() {
             @Override
             public void onSuccess(retrofit2.Response<Response<Place>> response) {
                 swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(getActivity(), response.body().getData().get(0).getPoint(), Toast.LENGTH_SHORT).show();
-                listData = (ArrayList<Place>) response.body().getData();
-                listAdapter.updateData(listData);
-                listAdapter.notifyDataSetChanged();
+                listAdapter.updateData((ArrayList<Place>) response.body().getData());
+                setProgressBarVisibility(false);
             }
 
             @Override
             public void onError(String err) {
                 swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(getActivity(), err, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), err, Toast.LENGTH_SHORT).show(); //TODO сделать friendly error
+                setProgressBarVisibility(false);
             }
         });
+    }
+
+    private void setProgressBarVisibility(Boolean state) {
+        pbList.setVisibility(state ? View.VISIBLE : View.GONE);
     }
 }

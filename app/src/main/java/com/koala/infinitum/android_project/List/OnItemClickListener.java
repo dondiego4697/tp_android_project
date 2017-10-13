@@ -1,4 +1,4 @@
-package com.koala.infinitum.android_project.mainFragments;
+package com.koala.infinitum.android_project.List;
 
 import android.view.View;
 
