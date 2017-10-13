@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(pagerAdapter);
     }
 
-    private void setTabLayoutIcons() {
+    /*private void setTabLayoutIcons() {
         ArrayList<Integer> buff = new ArrayList<>();
         buff.add(R.drawable.ic_dashboard_black_24dp);
         buff.add(R.drawable.ic_home_black_24dp);
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 tl.setIcon(buff.get(i));
             }
         }
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

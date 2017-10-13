@@ -4,8 +4,9 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.koala.infinitum.android_project.mainFragments.list.ListFragment;
-import com.koala.infinitum.android_project.mainFragments.list.ListTypes;
+import com.koala.infinitum.android_project.mainFragments.globalEvents.GlobalEvents;
+import com.koala.infinitum.android_project.mainFragments.myEvents.MyEvents;
+import com.koala.infinitum.android_project.mainFragments.mySubscriptions.MySubscriptions;
 
 import java.util.ArrayList;
 
@@ -23,16 +24,16 @@ class PageAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0: {
-                return ListFragment.newInstance(ListTypes.Main1);
+                return new MyEvents();
             }
             case 1: {
-                return ListFragment.newInstance(ListTypes.Main2);
+                return new MySubscriptions();
             }
             case 2: {
-                return ListFragment.newInstance(ListTypes.Main3);
+                return new GlobalEvents();
             }
             default: {
-                return ListFragment.newInstance(ListTypes.Main3);
+                return new GlobalEvents();
             }
         }
     }
