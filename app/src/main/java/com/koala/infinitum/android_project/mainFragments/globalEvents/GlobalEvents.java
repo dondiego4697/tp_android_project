@@ -21,7 +21,7 @@ import com.koala.infinitum.android_project.mainFragments.globalEvents.list.Globa
 
 import java.util.ArrayList;
 
-public class GlobalEvents extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class GlobalEvents extends Fragment implements SwipeRefreshLayout.OnRefreshListener { //from API 22
 
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;

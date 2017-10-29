@@ -10,4 +10,16 @@
 
     <string name="place_item__time_start">Время встречи: %1$s</string>
     <string name="place_item__time_created">Создано: %1$s</string>
+
+    <string name="login_title">Вход</string>
+    <string name="register_title">Регистрация</string>
+    <string name="login_placeholder">Логин</string>
+    <string name="password_placeholder">Пароль</string>
+    <string name="password_verification_placeholder">Повтор пароля</string>
+    <string name="login_btn">Войти</string>
+    <string name="register_btn">Зарегистрироваться</string>
+    <string name="link_to_register">Нет аккаунта? Зарегистрироваться</string>
+    <string name="link_to_login">Уже есть аккаунт? Войти</string>
+
+
 </resources>

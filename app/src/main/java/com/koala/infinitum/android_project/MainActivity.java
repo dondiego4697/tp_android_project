@@ -25,13 +25,13 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
-    TabLayout tabLayout;
+    TabLayout tabLayout; //available only from API 22
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar(); //method getSupportActionBar from API 24
         if (actionBar != null) {
             actionBar.setElevation(0);
         }
