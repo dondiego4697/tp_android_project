@@ -10,13 +10,13 @@ import android.view.ViewGroup;
 
 import com.koala.infinitum.android_project.R;
 
-public class LoginFragment extends Fragment{
+public class RegisterFragment extends Fragment{
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        return inflater.inflate(R.layout.fragment_register, container, false);
 
-        //todo: Добавить toolbar на вход и регистрацию
+
     }
 }
