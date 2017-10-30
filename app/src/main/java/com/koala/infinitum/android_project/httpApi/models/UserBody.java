@@ -4,11 +4,9 @@ package com.koala.infinitum.android_project.httpApi.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class User {
+public class UserBody {
 
-    @SerializedName("id")
-    @Expose
-    private Integer id;
+
     @SerializedName("login")
     @Expose
     private String login;
@@ -16,12 +14,9 @@ public class User {
     @Expose
     private String password;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    public UserBody(String login, String password){
+        this.login = login;
+        this.password = password;
     }
 
     public String getLogin() {
