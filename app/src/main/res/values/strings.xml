@@ -18,8 +18,8 @@
     <string name="password_verification_placeholder">Повтор пароля</string>
     <string name="login_btn">Войти</string>
     <string name="register_btn">Зарегистрироваться</string>
-    <string name="link_to_register">Нет аккаунта? Зарегистрироваться</string>
-    <string name="link_to_login">Уже есть аккаунт? Войти</string>
+    <string name="link_to_register"><u>Нет аккаунта? Зарегистрироваться</u></string>
+    <string name="link_to_login"><u>Уже есть аккаунт? Войти</u></string>
 
 
 </resources>
