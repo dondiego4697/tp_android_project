@@ -1,6 +1,13 @@
 <resources>
-    <string name="app_name">Android-project</string>
+    <string name="app_name">Urbiscor</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="find_event">Find place</string>
+    <string name="page__my_events">My events</string>
+    <string name="page__my_subsc">Subscriptions</string>
+    <string name="page__global">Global</string>
+
+    <string name="place_item__time_start">Время встречи: %1$s</string>
+    <string name="place_item__time_created">Создано: %1$s</string>
 </resources>
