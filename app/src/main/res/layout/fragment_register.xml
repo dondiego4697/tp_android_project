@@ -61,6 +61,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+
     <TextView
         android:id="@+id/link_to_login"
         android:layout_width="match_parent"
@@ -68,6 +72,8 @@
         android:text="@string/link_to_login"
         android:textAlignment="center"
         android:clickable="true"
+        android:textSize="17sp"
+        android:textStyle="italic"
         android:onClick="switchToLogin"/>
 
 

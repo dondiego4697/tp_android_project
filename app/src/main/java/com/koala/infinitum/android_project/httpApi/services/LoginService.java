@@ -3,7 +3,6 @@ package com.koala.infinitum.android_project.httpApi.services;
 
 import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
 import com.koala.infinitum.android_project.httpApi.interfaces.user.UserLogin;
-import com.koala.infinitum.android_project.httpApi.models.Response;
 import com.koala.infinitum.android_project.httpApi.models.ResponseOneObject;
 import com.koala.infinitum.android_project.httpApi.models.UserBody;
 import com.koala.infinitum.android_project.httpApi.models.UserValidation;
@@ -59,7 +58,7 @@ public class LoginService {
                 @Override
                 public void onResponse(Call<ResponseOneObject<UserValidation>> call, retrofit2.Response<ResponseOneObject<UserValidation>> response) {
                     if (response.body() == null) {
-                        clientCallback.onError(("Ошибка при регистрации!"));
+                        clientCallback.onError(("Этот логин уже занят, придумайте другой"));
                     } else if (response.body().getStatusCode() != 200) {
                         clientCallback.onError(response.body().getErrorDescription());
                     } else {

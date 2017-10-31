@@ -43,11 +43,16 @@ public class RegisterFragment extends Fragment {
         register_btn = (Button) view.findViewById(R.id.register_btn);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar_register);
 
-        register_btn.setOnClickListener(new View.OnClickListener(){
+        register_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
-                //// TODO: 31.10.17 add TextWatcher to verificate password
+
+                if (!password_text.getText().toString().equals(password_verif_text.getText().toString())) {  //// TODO: 31.10.17 add TextWatcher to verificate password
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(getActivity(), "Пароли не совпадают!", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 new LoginService().register(
                         login_text.getText().toString(),
                         password_text.getText().toString(),
