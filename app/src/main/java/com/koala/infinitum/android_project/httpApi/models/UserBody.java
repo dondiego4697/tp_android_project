@@ -14,7 +14,7 @@ public class UserBody {
     @Expose
     private String password;
 
-    public UserBody(String login, String password){
+    public UserBody(String login, String password) {
         this.login = login;
         this.password = password;
     }

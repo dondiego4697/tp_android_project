@@ -16,7 +16,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginService {
 
     private UserLogin userLogin;
-    public LoginService(){
+
+    public LoginService() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://urbiscor-server.herokuapp.com/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -26,14 +27,14 @@ public class LoginService {
 
     public void login(String login,
                       String password,
-                      final ClientCallback<ResponseOneObject<UserValidation>> clientCallback){
-        try{
+                      final ClientCallback<ResponseOneObject<UserValidation>> clientCallback) {
+        try {
             userLogin.login(new UserBody(login, password)).enqueue(new Callback<ResponseOneObject<UserValidation>>() {
                 @Override
                 public void onResponse(Call<ResponseOneObject<UserValidation>> call, retrofit2.Response<ResponseOneObject<UserValidation>> response) {
-                    if(response.body() == null){
-                        clientCallback.onError(("empty response"));
-                    } else if(response.body().getStatusCode() != 200){
+                    if (response.body() == null) {
+                        clientCallback.onError(("Неверный логин или пароль!"));
+                    } else if (response.body().getStatusCode() != 200) {
                         clientCallback.onError(response.body().getErrorDescription());
                     } else {
                         clientCallback.onSuccess(response);
@@ -46,6 +47,32 @@ public class LoginService {
                 }
             });
         } catch (Exception e) {
+            clientCallback.onError(String.valueOf(e));
+        }
+    }
+
+    public void register(String login,
+                         String password,
+                         final ClientCallback<ResponseOneObject<UserValidation>> clientCallback){
+        try{
+            userLogin.register(new UserBody(login, password)).enqueue(new Callback<ResponseOneObject<UserValidation>>() {
+                @Override
+                public void onResponse(Call<ResponseOneObject<UserValidation>> call, retrofit2.Response<ResponseOneObject<UserValidation>> response) {
+                    if (response.body() == null) {
+                        clientCallback.onError(("Ошибка при регистрации!"));
+                    } else if (response.body().getStatusCode() != 200) {
+                        clientCallback.onError(response.body().getErrorDescription());
+                    } else {
+                        clientCallback.onSuccess(response);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseOneObject<UserValidation>> call, Throwable t) {
+                    clientCallback.onError(String.valueOf(t));
+                }
+            });
+        } catch (Exception e){
             clientCallback.onError(String.valueOf(e));
         }
     }

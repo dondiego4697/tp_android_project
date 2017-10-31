@@ -54,6 +54,13 @@
         android:layout_width="match_parent"
         android:layout_height="30dp" />
 
+    <ProgressBar
+        android:id="@+id/progressBar_register"
+        style="?android:attr/progressBarStyle"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <TextView
         android:id="@+id/link_to_login"
         android:layout_width="match_parent"

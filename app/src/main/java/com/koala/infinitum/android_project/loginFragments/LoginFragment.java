@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +16,11 @@ import android.widget.Toast;
 import com.koala.infinitum.android_project.MainActivity;
 import com.koala.infinitum.android_project.R;
 import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
-import com.koala.infinitum.android_project.httpApi.models.Response;
 import com.koala.infinitum.android_project.httpApi.models.ResponseOneObject;
 import com.koala.infinitum.android_project.httpApi.models.UserValidation;
 import com.koala.infinitum.android_project.httpApi.services.LoginService;
 
-public class LoginFragment extends Fragment{
+public class LoginFragment extends Fragment {
 
     private EditText login_text;
     private EditText password_text;
@@ -49,21 +47,20 @@ public class LoginFragment extends Fragment{
                         login_text.getText().toString(),
                         password_text.getText().toString(),
                         new ClientCallback<ResponseOneObject<UserValidation>>() {
-                    @Override
-                    public void onSuccess(retrofit2.Response<ResponseOneObject<UserValidation>> response) {
-                        progressBar.setVisibility(View.GONE);
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                        intent.putExtra("token", response.body().getData().getToken());
-                        startActivity(intent);
-                    }
+                            @Override
+                            public void onSuccess(retrofit2.Response<ResponseOneObject<UserValidation>> response) {
+                                progressBar.setVisibility(View.GONE);
+                                Intent intent = new Intent(getActivity(), MainActivity.class);
+                                intent.putExtra("token", response.body().getData().getToken());
+                                startActivity(intent);
+                            }
 
-                    @Override
-                    public void onError(String err) {
-                        progressBar.setVisibility(View.GONE);
-                        Toast.makeText(getActivity(), err, Toast.LENGTH_LONG).show();
-                        Log.d("login_error", err);
-                    }
-                });
+                            @Override
+                            public void onError(String err) {
+                                progressBar.setVisibility(View.GONE);
+                                Toast.makeText(getActivity(), err, Toast.LENGTH_LONG).show();
+                            }
+                        });
             }
         });
 
