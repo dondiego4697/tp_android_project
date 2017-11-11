@@ -1,7 +1,9 @@
 package com.koala.infinitum.android_project.loginFragments;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,12 +22,20 @@ import com.koala.infinitum.android_project.httpApi.models.ResponseOneObject;
 import com.koala.infinitum.android_project.httpApi.models.UserValidation;
 import com.koala.infinitum.android_project.httpApi.services.LoginService;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class LoginFragment extends Fragment {
+
+    private final static String LOGIN = "login";
+    private final static String PASSWD = "password";
 
     private EditText login_text;
     private EditText password_text;
     private Button login_btn;
     private ProgressBar progressBar;
+
+    SharedPreferences prefs;
+
 
     @Nullable
     @Override
@@ -33,6 +43,7 @@ public class LoginFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+
 
         login_text = (EditText) view.findViewById(R.id.login);
         password_text = (EditText) view.findViewById(R.id.password);
@@ -49,6 +60,13 @@ public class LoginFragment extends Fragment {
                         new ClientCallback<ResponseOneObject<UserValidation>>() {
                             @Override
                             public void onSuccess(retrofit2.Response<ResponseOneObject<UserValidation>> response) {
+                                SharedPreferences.Editor editor =  getActivity().getApplicationContext().getSharedPreferences("MyPref", 0).edit();
+                                editor.putString(LOGIN, login_text.getText().toString());
+                                editor.putString(PASSWD, password_text.getText().toString());
+                                editor.commit();
+
+                                SharedPreferences prefs = getActivity().getPreferences(MODE_PRIVATE);
+                                Toast.makeText(getActivity(), prefs.getString(LOGIN, ""), Toast.LENGTH_LONG).show();
                                 progressBar.setVisibility(View.GONE);
                                 Intent intent = new Intent(getActivity(), MainActivity.class);
                                 intent.putExtra("token", response.body().getData().getToken());
@@ -60,7 +78,7 @@ public class LoginFragment extends Fragment {
                                 progressBar.setVisibility(View.GONE);
                                 Toast.makeText(getActivity(), err, Toast.LENGTH_LONG).show();
                             }
-                        });
+                        }, getContext());
             }
         });
 

@@ -1,6 +1,8 @@
 package com.koala.infinitum.android_project.httpApi.services;
 
 
+import android.content.Context;
+
 import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
 import com.koala.infinitum.android_project.httpApi.interfaces.user.UserLogin;
 import com.koala.infinitum.android_project.httpApi.models.ResponseOneObject;
@@ -26,7 +28,8 @@ public class LoginService {
 
     public void login(String login,
                       String password,
-                      final ClientCallback<ResponseOneObject<UserValidation>> clientCallback) {
+                      final ClientCallback<ResponseOneObject<UserValidation>> clientCallback,
+                      Context context) {
         try {
             userLogin.login(new UserBody(login, password)).enqueue(new Callback<ResponseOneObject<UserValidation>>() {
                 @Override
