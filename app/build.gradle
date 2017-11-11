@@ -30,9 +30,11 @@ dependencies {
     compile 'com.android.support:support-vector-drawable:25.3.1'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile('com.mikepenz.materialdrawer:library:0.9.5@aar') {
+    compile ('com.mikepenz:materialdrawer:6.0.1@aar') {
         transitive = true
     }
+    compile 'com.mikepenz:google-material-typeface:3.0.1.2.original@aar' //Google Material Icons
+    compile 'com.mikepenz:fontawesome-typeface:4.7.0.2@aar'     //FontAwesome
 }
 repositories {
     mavenCentral()

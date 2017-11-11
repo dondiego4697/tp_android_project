@@ -63,10 +63,7 @@ public class LoginFragment extends Fragment {
                                 SharedPreferences.Editor editor =  getActivity().getApplicationContext().getSharedPreferences("MyPref", 0).edit();
                                 editor.putString(LOGIN, login_text.getText().toString());
                                 editor.putString(PASSWD, password_text.getText().toString());
-                                editor.commit();
-
-                                SharedPreferences prefs = getActivity().getPreferences(MODE_PRIVATE);
-                                Toast.makeText(getActivity(), prefs.getString(LOGIN, ""), Toast.LENGTH_LONG).show();
+                                editor.apply();
                                 progressBar.setVisibility(View.GONE);
                                 Intent intent = new Intent(getActivity(), MainActivity.class);
                                 intent.putExtra("token", response.body().getData().getToken());

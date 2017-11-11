@@ -4,6 +4,7 @@
     <item>
         <bitmap
             android:gravity="center"
+
             android:src="@mipmap/splash"/>
     </item>
     <item android:drawable="@color/material_drawer_hint_text"/>
