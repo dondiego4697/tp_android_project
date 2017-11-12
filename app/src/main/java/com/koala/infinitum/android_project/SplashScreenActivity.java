@@ -19,6 +19,8 @@ public class SplashScreenActivity extends AppCompatActivity {
     private final static String LOGIN = "login";
     private final static String PASSWD = "password";
 
+    //TODO: make class with constants for sharedPreferences
+
     private String login;
     private String password;
 
@@ -39,6 +41,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                         public void onSuccess(retrofit2.Response<ResponseOneObject<UserValidation>> response) {
                             Intent intent = new Intent(getBaseContext(), MainActivity.class);
                             intent.putExtra("token", response.body().getData().getToken());
+                            intent.putExtra(LOGIN, login);
                             startActivity(intent);
                         }
 

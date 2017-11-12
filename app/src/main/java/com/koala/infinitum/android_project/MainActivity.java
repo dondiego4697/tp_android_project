@@ -14,10 +14,14 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -28,12 +32,17 @@ public class MainActivity extends AppCompatActivity {
     private final static String LOGIN = "login";
     private final static String PASSWD = "password";
 
+    private String currUserLogin;
+
 
     TabLayout tabLayout;
+
+    Drawer navDrawer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        currUserLogin = getIntent().getExtras().getString(LOGIN);
         setContentView(R.layout.activity_main);
 //        ActionBar actionBar = getSupportActionBar();
 //        if (actionBar != null) {
@@ -43,18 +52,26 @@ public class MainActivity extends AppCompatActivity {
         // Handle Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-//        AccountHeader accountHeader = new AccountHeaderBuilder()
-//                .withActivity(this)
-//                .withHeaderBackground(R.layout.nav_drawer_header)
-//                .build();
+        IProfile profile = new ProfileDrawerItem()
+                .withName(currUserLogin)
+                .withIcon(R.mipmap.ic_launcher_round);
 
-        Drawer drawer = new DrawerBuilder()
+        AccountHeader accountHeader = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.mipmap.header)
+                .addProfiles(profile)
+                .build();
+
+        navDrawer = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
-                .withActionBarDrawerToggle(true)
-                .withHeader(R.layout.nav_drawer_header)
+                .withDisplayBelowStatusBar(true)
+                .withTranslucentStatusBar(true)
+                .withActionBarDrawerToggleAnimated(true)
+
+                .withAccountHeader(accountHeader)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(R.string.drawer_item_settings).withIcon(FontAwesome.Icon.faw_cog).withIdentifier(DRAWER_ITEM_SETTINGS),
                         new PrimaryDrawerItem().withName(R.string.drawer_item_out).withIcon(FontAwesome.Icon.faw_sign_out).withIdentifier(DRAWER_ITEM_OUT)
@@ -119,5 +136,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (navDrawer != null && navDrawer.isDrawerOpen()) {
+            navDrawer.closeDrawer();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.koala.infinitum.android_project.loginFragments;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,9 @@ import com.koala.infinitum.android_project.httpApi.services.LoginService;
 import retrofit2.Response;
 
 public class RegisterFragment extends Fragment {
+
+    private final static String LOGIN = "login";
+    private final static String PASSWD = "password";
 
     private EditText login_text;
     private EditText password_text;
@@ -59,9 +63,14 @@ public class RegisterFragment extends Fragment {
                         new ClientCallback<ResponseOneObject<UserValidation>>() {
                             @Override
                             public void onSuccess(Response<ResponseOneObject<UserValidation>> response) {
+                                SharedPreferences.Editor editor =  getActivity().getApplicationContext().getSharedPreferences("MyPref", 0).edit();
+                                editor.putString(LOGIN, login_text.getText().toString());
+                                editor.putString(PASSWD, password_text.getText().toString());
+                                editor.apply();
                                 progressBar.setVisibility(View.GONE);
                                 Intent intent = new Intent(getActivity(), MainActivity.class);
                                 intent.putExtra("token", response.body().getData().getToken());
+                                intent.putExtra(LOGIN, login_text.getText().toString());
                                 startActivity(intent);
                             }
 

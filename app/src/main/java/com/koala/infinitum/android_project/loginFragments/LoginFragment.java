@@ -67,6 +67,7 @@ public class LoginFragment extends Fragment {
                                 progressBar.setVisibility(View.GONE);
                                 Intent intent = new Intent(getActivity(), MainActivity.class);
                                 intent.putExtra("token", response.body().getData().getToken());
+                                intent.putExtra(LOGIN, login_text.getText().toString());
                                 startActivity(intent);
                             }
 
