@@ -3,6 +3,8 @@ package com.koala.infinitum.android_project;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +27,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 
 public class MainActivity extends AppCompatActivity {
+
 
     private static final int DRAWER_ITEM_SETTINGS = 0;
     private static final int DRAWER_ITEM_OUT = 1;
