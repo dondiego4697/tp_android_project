@@ -59,18 +59,17 @@ public class GlobalEvents extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private void getAllEvents() {
         listAdapter.clear();
+        swipeRefreshLayout.setRefreshing(false);
         setProgressBarVisibility(true);
         new PlaceService().getAll(10, 0, true, null, new ClientCallback<Responses<Place>>() {
             @Override
             public void onSuccess(retrofit2.Response<Responses<Place>> response) {
-                swipeRefreshLayout.setRefreshing(false);
                 listAdapter.updateData((ArrayList<Place>) response.body().getData());
                 setProgressBarVisibility(false);
             }
 
             @Override
             public void onError(String err) {
-                swipeRefreshLayout.setRefreshing(false);
                 Toast.makeText(getActivity(), err, Toast.LENGTH_SHORT).show(); //TODO сделать friendly error
                 setProgressBarVisibility(false);
             }
