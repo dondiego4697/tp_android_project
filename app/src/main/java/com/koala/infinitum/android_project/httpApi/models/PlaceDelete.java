@@ -7,23 +7,24 @@ import com.google.gson.annotations.SerializedName;
  * Created by andrey on 12.11.17.
  */
 
-public class Subcribes {
+public class PlaceDelete {
     @SerializedName("id")
     @Expose
     private Integer id;
 
-    @SerializedName("user_id")
-    @Expose
+    @SerializedName("userId")
     private Integer userId;
 
-    @SerializedName("place_id")
-    @Expose
-    private Integer placeId;
+    public void setId(Integer id){this.id=id;}
+
+    public void setUserId(Integer userId){this.userId=userId;}
 
     public Integer getId(){return id;}
 
     public Integer getUserId(){return userId;}
 
-    public Integer getPlaceId(){return placeId;}
-
+    public PlaceDelete(Integer id, Integer userId){
+        this.id=id;
+        this.userId=userId;
+    }
 }
