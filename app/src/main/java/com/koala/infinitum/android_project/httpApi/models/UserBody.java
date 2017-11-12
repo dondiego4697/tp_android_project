@@ -18,7 +18,7 @@ public class UserBody {
         this.login = login;
         this.password = password;
     }
-
+    
     public String getLogin() {
         return login;
     }
