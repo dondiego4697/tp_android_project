@@ -1,6 +1,7 @@
 package com.koala.infinitum.android_project;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,10 +19,15 @@ public class LoginActivity extends AppCompatActivity {
     private Fragment registerFragment;
     private FragmentTransaction transaction;
 
+    //SharedPreferences prefs = getApplicationContext().getSharedPreferences();
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
 
         loginFragment = new LoginFragment();
         registerFragment = new RegisterFragment();

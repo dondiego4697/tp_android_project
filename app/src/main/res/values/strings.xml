@@ -21,5 +21,8 @@
     <string name="link_to_register"><u>Нет аккаунта? Зарегистрироваться</u></string>
     <string name="link_to_login"><u>Уже есть аккаунт? Войти</u></string>
 
+    <string name="drawer_item_settings">Настройки</string>
+    <string name="drawer_item_out">Выйти</string>
+
 
 </resources>

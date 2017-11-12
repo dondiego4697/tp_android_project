@@ -2,6 +2,7 @@ package com.koala.infinitum.android_project.loginFragments;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,11 +25,16 @@ import retrofit2.Response;
 
 public class RegisterFragment extends Fragment {
 
+    private final static String LOGIN = "login";
+    private final static String PASSWD = "password";
+
     private EditText login_text;
     private EditText password_text;
     private EditText password_verif_text;
     private Button register_btn;
     private ProgressBar progressBar;
+
+    public static ClientCallback<ResponseOneObject<UserValidation>> authHandler;
 
     @Nullable
     @Override
@@ -53,15 +59,22 @@ public class RegisterFragment extends Fragment {
                     Toast.makeText(getActivity(), "Пароли не совпадают!", Toast.LENGTH_LONG).show();
                     return;
                 }
-                new LoginService().register(
+
+                stop();
+                authHandler = new LoginService().register(
                         login_text.getText().toString(),
                         password_text.getText().toString(),
                         new ClientCallback<ResponseOneObject<UserValidation>>() {
                             @Override
                             public void onSuccess(Response<ResponseOneObject<UserValidation>> response) {
+                                SharedPreferences.Editor editor = getActivity().getApplicationContext().getSharedPreferences("MyPref", 0).edit();
+                                editor.putString(LOGIN, login_text.getText().toString());
+                                editor.putString(PASSWD, password_text.getText().toString());
+                                editor.apply();
                                 progressBar.setVisibility(View.GONE);
                                 Intent intent = new Intent(getActivity(), MainActivity.class);
                                 intent.putExtra("token", response.body().getData().getToken());
+                                intent.putExtra(LOGIN, login_text.getText().toString());
                                 startActivity(intent);
                             }
 
@@ -77,5 +90,16 @@ public class RegisterFragment extends Fragment {
         return view;
 
 
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        stop();
+    }
+
+    public void stop() {
+        authHandler = null;// отписываемся
     }
 }
