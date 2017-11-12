@@ -15,13 +15,13 @@ import android.widget.Toast;
 import com.koala.infinitum.android_project.R;
 import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
 import com.koala.infinitum.android_project.httpApi.models.Place;
-import com.koala.infinitum.android_project.httpApi.models.Response;
+import com.koala.infinitum.android_project.httpApi.models.Responses;
 import com.koala.infinitum.android_project.httpApi.services.PlaceService;
 import com.koala.infinitum.android_project.mainFragments.globalEvents.list.GlobalEventsListAdapter;
 
 import java.util.ArrayList;
 
-public class GlobalEvents extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class GlobalEvents extends Fragment implements SwipeRefreshLayout.OnRefreshListener { //from API 22
 
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
@@ -60,9 +60,9 @@ public class GlobalEvents extends Fragment implements SwipeRefreshLayout.OnRefre
     private void getAllEvents() {
         listAdapter.clear();
         setProgressBarVisibility(true);
-        new PlaceService().getAll(10, 0, true, null, new ClientCallback<Response<Place>>() {
+        new PlaceService().getAll(10, 0, true, null, new ClientCallback<Responses<Place>>() {
             @Override
-            public void onSuccess(retrofit2.Response<Response<Place>> response) {
+            public void onSuccess(retrofit2.Response<Responses<Place>> response) {
                 swipeRefreshLayout.setRefreshing(false);
                 listAdapter.updateData((ArrayList<Place>) response.body().getData());
                 setProgressBarVisibility(false);
