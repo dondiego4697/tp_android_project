@@ -3,79 +3,103 @@ package com.koala.infinitum.android_project.httpApi.services;
 
 import android.content.Context;
 
+import com.koala.infinitum.android_project.httpApi.Api;
 import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
-import com.koala.infinitum.android_project.httpApi.interfaces.user.UserLogin;
 import com.koala.infinitum.android_project.httpApi.models.ResponseOneObject;
 import com.koala.infinitum.android_project.httpApi.models.UserBody;
 import com.koala.infinitum.android_project.httpApi.models.UserValidation;
 
-import retrofit2.Call;
-import retrofit2.Callback;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginService {
 
-    private UserLogin userLogin;
+    private UIThread<ResponseOneObject<UserValidation>> uiThread = new UIThread<>();//?
+    private ExecutorService executorService= Executors.newSingleThreadExecutor();
 
-    public LoginService() {
+  // @Inject
+    public Api api;
+
+   /* public LoginService(){
+        App.getComponent().inject(this);
+    }*/
+   public LoginService() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://urbiscor-server.herokuapp.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        userLogin = retrofit.create(UserLogin.class);
+        api = retrofit.create(Api.class);
     }
 
-    public void login(String login,
-                      String password,
-                      final ClientCallback<ResponseOneObject<UserValidation>> clientCallback,
-                      Context context) {
-        try {
-            userLogin.login(new UserBody(login, password)).enqueue(new Callback<ResponseOneObject<UserValidation>>() {
-                @Override
-                public void onResponse(Call<ResponseOneObject<UserValidation>> call, retrofit2.Response<ResponseOneObject<UserValidation>> response) {
-                    if (response.body() == null) {
-                        clientCallback.onError(("Неверный логин или пароль!"));
-                    } else if (response.body().getStatusCode() != 200) {
-                        clientCallback.onError(response.body().getErrorDescription());
-                    } else {
-                        clientCallback.onSuccess(response);
-                    }
-                }
+    public ClientCallback<ResponseOneObject<UserValidation>> login(final String login,
+                                                                   final String password,
+                                                                   final ClientCallback<ResponseOneObject<UserValidation>> clientCallback,
+                                                                   Context context) {
 
-                @Override
-                public void onFailure(Call<ResponseOneObject<UserValidation>> call, Throwable t) {
-                    clientCallback.onError(String.valueOf(t));
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                  Response<ResponseOneObject<UserValidation>> response =  api.login(new UserBody(login, password)).execute();
+                            if (response.body() == null) {
+                                uiThread.Fail(clientCallback,("Неверный логин или пароль!"));
+                            } else if (response.body().getStatusCode() != 200) {
+                                uiThread.Fail(clientCallback,response.body().getErrorDescription());
+                            } else {
+                                uiThread.Success(clientCallback,response);
+                            }
+                } catch (Exception e) {
+                    uiThread.Fail(clientCallback,String.valueOf(e));
                 }
-            });
-        } catch (Exception e) {
-            clientCallback.onError(String.valueOf(e));
-        }
+            }
+        });
+       return clientCallback;
     }
 
-    public void register(String login,
-                         String password,
+    public ClientCallback<ResponseOneObject<UserValidation>> register(final String login,
+                         final String password,
                          final ClientCallback<ResponseOneObject<UserValidation>> clientCallback){
-        try{
-            userLogin.register(new UserBody(login, password)).enqueue(new Callback<ResponseOneObject<UserValidation>>() {
-                @Override
-                public void onResponse(Call<ResponseOneObject<UserValidation>> call, retrofit2.Response<ResponseOneObject<UserValidation>> response) {
-                    if (response.body() == null) {
-                        clientCallback.onError(("Этот логин уже занят, придумайте другой"));
-                    } else if (response.body().getStatusCode() != 200) {
-                        clientCallback.onError(response.body().getErrorDescription());
-                    } else {
-                        clientCallback.onSuccess(response);
-                    }
-                }
 
-                @Override
-                public void onFailure(Call<ResponseOneObject<UserValidation>> call, Throwable t) {
-                    clientCallback.onError(String.valueOf(t));
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Response<ResponseOneObject<UserValidation>> response=api.register(new UserBody(login, password)).execute();
+                    if (response.body() == null) {
+                                uiThread.Fail(clientCallback,"Этот логин уже занят, придумайте другой");
+                            } else if (response.body().getStatusCode() != 200) {
+                                uiThread.Fail(clientCallback,response.body().getErrorDescription());
+                            } else {
+                                uiThread.Success(clientCallback,response);
+                            }
+                }catch (Exception e){
+                    uiThread.Fail(clientCallback,String.valueOf(e));
                 }
-            });
-        } catch (Exception e){
-            clientCallback.onError(String.valueOf(e));
-        }
+            }
+        });
+        return clientCallback;
     }
+
+  /*  private void Success(final ClientCallback<ResponseOneObject<UserValidation>> clientCallback,final Response<ResponseOneObject<UserValidation>> response) {
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                clientCallback.onSuccess(response);
+            }
+        });
+    }
+
+    private void Fail(final ClientCallback<ResponseOneObject<UserValidation>> clientCallback, final String error){
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                clientCallback.onError(error);
+            }
+        });
+
+    }*/
 }

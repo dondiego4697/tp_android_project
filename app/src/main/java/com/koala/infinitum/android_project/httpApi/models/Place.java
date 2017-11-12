@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.koala.infinitum.android_project.support.DataParser;
 
+import java.util.List;
 public class Place {
 
     @SerializedName("id")
@@ -17,7 +18,7 @@ public class Place {
     private String description;
     @SerializedName("point")
     @Expose
-    private String point;
+    private List<Double>point;
     @SerializedName("created")
     @Expose
     private String created;
@@ -55,7 +56,7 @@ public class Place {
         return description;
     }
 
-    public String getPoint() {
+    public List<Double> getPoint() {
         return point;
     }
 
@@ -131,7 +132,7 @@ public class Place {
         this.id = id;
     }
 
-    public void setPoint(String point) {
+    public void setPoint(List<Double> point) {
         this.point = point;
     }
 

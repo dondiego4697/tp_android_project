@@ -35,6 +35,10 @@ dependencies {
     }
     compile 'com.mikepenz:google-material-typeface:3.0.1.2.original@aar' //Google Material Icons
     compile 'com.mikepenz:fontawesome-typeface:4.7.0.2@aar'     //FontAwesome
+    
+    // Dagger
+    compile 'com.google.dagger:dagger:2.12'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.12'
 }
 repositories {
     mavenCentral()

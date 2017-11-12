@@ -34,6 +34,8 @@ public class RegisterFragment extends Fragment {
     private Button register_btn;
     private ProgressBar progressBar;
 
+    public static ClientCallback<ResponseOneObject<UserValidation>> authHandler;
+  
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -57,13 +59,15 @@ public class RegisterFragment extends Fragment {
                     Toast.makeText(getActivity(), "Пароли не совпадают!", Toast.LENGTH_LONG).show();
                     return;
                 }
-                new LoginService().register(
+              
+                stop();
+                authHandler = new LoginService().register(
                         login_text.getText().toString(),
                         password_text.getText().toString(),
                         new ClientCallback<ResponseOneObject<UserValidation>>() {
                             @Override
                             public void onSuccess(Response<ResponseOneObject<UserValidation>> response) {
-                                SharedPreferences.Editor editor =  getActivity().getApplicationContext().getSharedPreferences("MyPref", 0).edit();
+                                SharedPreferences.Editor editor = getActivity().getApplicationContext().getSharedPreferences("MyPref", 0).edit();
                                 editor.putString(LOGIN, login_text.getText().toString());
                                 editor.putString(PASSWD, password_text.getText().toString());
                                 editor.apply();
@@ -86,5 +90,15 @@ public class RegisterFragment extends Fragment {
         return view;
 
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        stop();
+    }
+
+    public void stop() {
+        authHandler = null;// отписываемся
     }
 }

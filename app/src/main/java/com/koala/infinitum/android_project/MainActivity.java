@@ -7,11 +7,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -25,7 +23,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 
 public class MainActivity extends AppCompatActivity {
-
+  
     private static final int DRAWER_ITEM_SETTINGS = 0;
     private static final int DRAWER_ITEM_OUT = 1;
 
@@ -48,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
 //        if (actionBar != null) {
 //            actionBar.setElevation(0);
 //        }
+        /*component = */
+       // App.getComponent().inject(this);
 
         // Handle Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
