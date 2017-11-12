@@ -18,10 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginService {
 
-
     private UIThread<ResponseOneObject<UserValidation>> uiThread = new UIThread<>();//?
-
-
     private ExecutorService executorService= Executors.newSingleThreadExecutor();
 
   // @Inject

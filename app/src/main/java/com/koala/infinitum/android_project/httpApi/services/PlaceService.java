@@ -18,16 +18,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PlaceService {
 
-
-
-
     private UIThread<ResponseOneObject<UserResponse>> uiThread= new UIThread<>();
 
     private ExecutorService executorService= Executors.newSingleThreadExecutor();
 
    // @Inject
     public Api api;
-
     public PlaceService() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://urbiscor-server.herokuapp.com/")
@@ -148,5 +144,4 @@ public class PlaceService {
 
         return clientCallback;
     }
-
 }

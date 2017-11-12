@@ -35,7 +35,7 @@ public class RegisterFragment extends Fragment {
     private ProgressBar progressBar;
 
     public static ClientCallback<ResponseOneObject<UserValidation>> authHandler;
-
+  
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -59,7 +59,7 @@ public class RegisterFragment extends Fragment {
                     Toast.makeText(getActivity(), "Пароли не совпадают!", Toast.LENGTH_LONG).show();
                     return;
                 }
-
+              
                 stop();
                 authHandler = new LoginService().register(
                         login_text.getText().toString(),
@@ -91,7 +91,6 @@ public class RegisterFragment extends Fragment {
 
 
     }
-
 
     @Override
     public void onStop() {

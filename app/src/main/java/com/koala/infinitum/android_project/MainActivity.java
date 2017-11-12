@@ -23,8 +23,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 
 public class MainActivity extends AppCompatActivity {
-
-    //
+  
     private static final int DRAWER_ITEM_SETTINGS = 0;
     private static final int DRAWER_ITEM_OUT = 1;
 
@@ -49,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
 //        }
         /*component = */
        // App.getComponent().inject(this);
-
 
         // Handle Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

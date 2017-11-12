@@ -1,6 +1,7 @@
 package com.koala.infinitum.android_project.loginFragments;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -36,7 +37,6 @@ public class LoginFragment extends Fragment {
 
     private UserService userService;
     public static ClientCallback<ResponseOneObject<UserValidation>> authHandler;//сделать singleton через фреймворк
-
 
     @Nullable
     @Override
@@ -77,7 +77,6 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
-
 
                 stop();
                 authHandler=new LoginService().login( //подписываемся

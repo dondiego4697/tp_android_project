@@ -5,7 +5,6 @@ import com.google.gson.annotations.SerializedName;
 import com.koala.infinitum.android_project.support.DataParser;
 
 import java.util.List;
-
 public class Place {
 
     @SerializedName("id")
