@@ -23,6 +23,5 @@
 
     <string name="drawer_item_settings">Настройки</string>
     <string name="drawer_item_out">Выйти</string>
-
-
+    <string name="maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBnjDdycCvvAyj3GPXakbiiD7QCMa0TUF0</string>
 </resources>
