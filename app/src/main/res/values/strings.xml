@@ -10,4 +10,6 @@
 
     <string name="place_item__time_start">Время встречи: %1$s</string>
     <string name="place_item__time_created">Создано: %1$s</string>
+
+    <string name="maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBnjDdycCvvAyj3GPXakbiiD7QCMa0TUF0</string>
 </resources>
