@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.koala.infinitum.android_project.mapSearch.MapSearchActivity;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         AccountHeader accountHeader = new AccountHeaderBuilder()
                 .withActivity(this)
-                .withHeaderBackground(R.mipmap.header)
+                .withHeaderBackground(R.drawable.header_g)
                 .addProfiles(profile)
                 .build();
 
@@ -130,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_search_map: {
+                Intent intent = new Intent(this, MapSearchActivity.class);
+                startActivity(intent);
                 break;
             }
         }

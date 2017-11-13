@@ -4,8 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.koala.infinitum.android_project.support.DataParser;
 
+import java.io.Serializable;
 import java.util.List;
-public class Place {
+public class Place implements Serializable {
 
     @SerializedName("id")
     @Expose
