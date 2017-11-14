@@ -36,7 +36,7 @@ public class CategoryService {
         api= retrofit.create(Api.class);
     }
 
-    public ClientCallback<Responses<Category>> getCategories(final ClientCallback<Responses<Category>> clientCallback){
+    public void getCategories(final ClientCallback<Responses<Category>> clientCallback){
         final UIThread<Responses<Category>> responsesUIThread= new UIThread<>();
         executorService.execute(new Runnable() {
             @Override
@@ -55,7 +55,6 @@ public class CategoryService {
                 }
             }
         });
-        return  clientCallback;
     }
 
 }
