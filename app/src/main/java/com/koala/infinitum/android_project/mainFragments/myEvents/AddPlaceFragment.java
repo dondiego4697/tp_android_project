@@ -56,13 +56,11 @@ public class AddPlaceFragment extends Fragment {
         cancel_btn = (Button) view.findViewById(R.id.cancel_btn);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
-        //a lot of code  in one function
         System.out.println(userId);
         create_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
-                int categoryId = 0;
                 new CategoryService().getCategories(
                         new ClientCallback<Responses<Category>>() {
 
@@ -133,8 +131,6 @@ public class AddPlaceFragment extends Fragment {
         cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
-                //getActivity().getFragmentManager().popBackStack();
                 ((MapSearchActivity) getActivity()).showFragmentMap();
             }
         });

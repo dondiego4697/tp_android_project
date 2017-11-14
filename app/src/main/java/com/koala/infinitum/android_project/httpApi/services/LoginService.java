@@ -4,41 +4,31 @@ package com.koala.infinitum.android_project.httpApi.services;
 import android.content.Context;
 
 import com.koala.infinitum.android_project.httpApi.Api;
+import com.koala.infinitum.android_project.httpApi.ApiSingletone;
+import com.koala.infinitum.android_project.httpApi.ExecutorSingletone;
 import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
 import com.koala.infinitum.android_project.httpApi.models.ResponseOneObject;
 import com.koala.infinitum.android_project.httpApi.models.UserBody;
 import com.koala.infinitum.android_project.httpApi.models.UserValidation;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginService {
 
-    private UIThread<ResponseOneObject<UserValidation>> uiThread = new UIThread<>();//?
-    private ExecutorService executorService= Executors.newSingleThreadExecutor();
+    private ExecutorService executorService= ExecutorSingletone.getInstance();
 
-  // @Inject
-    public Api api;
+    private Api api= ApiSingletone.getInstance();
 
-   /* public LoginService(){
-        App.getComponent().inject(this);
-    }*/
-   public LoginService() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://urbiscor-server.herokuapp.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        api = retrofit.create(Api.class);
-    }
+
 
     public ClientCallback<ResponseOneObject<UserValidation>> login(final String login,
                                                                    final String password,
                                                                    final ClientCallback<ResponseOneObject<UserValidation>> clientCallback,
                                                                    Context context) {
+
+       final UIThread<ResponseOneObject<UserValidation>> uiThread = new UIThread<>();
 
         executorService.execute(new Runnable() {
             @Override
@@ -64,6 +54,7 @@ public class LoginService {
                          final String password,
                          final ClientCallback<ResponseOneObject<UserValidation>> clientCallback){
 
+        final UIThread<ResponseOneObject<UserValidation>> uiThread = new UIThread<>();
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -83,23 +74,4 @@ public class LoginService {
         });
         return clientCallback;
     }
-
-  /*  private void Success(final ClientCallback<ResponseOneObject<UserValidation>> clientCallback,final Response<ResponseOneObject<UserValidation>> response) {
-        mainHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                clientCallback.onSuccess(response);
-            }
-        });
-    }
-
-    private void Fail(final ClientCallback<ResponseOneObject<UserValidation>> clientCallback, final String error){
-        mainHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                clientCallback.onError(error);
-            }
-        });
-
-    }*/
 }

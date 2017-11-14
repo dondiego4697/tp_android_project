@@ -50,29 +50,6 @@ public class LoginFragment extends Fragment {
         password_text = (EditText) view.findViewById(R.id.password);
         login_btn = (Button) view.findViewById(R.id.login_btn);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-      /*  PlaceBody placeBody= new PlaceBody();
-        placeBody.setCategoryId(2);
-        placeBody.setCreatorId(2);
-        placeBody.setDescription("pll");
-        List<Double> list = new ArrayList<>();
-        list.add(1.4);
-        list.add(1.2);
-        placeBody.setPoint(list);
-        placeBody.setTimeStart("2007-10-04T23:08:10.0");
-        placeBody.setTitle("llo");
-        ClientCallback<Responses<Place>> place = new PlaceService().getAll(3,0,true,"cinema", new ClientCallback<Responses<Place>>() {
-            @Override
-            public void onSuccess(Response<Responses<Place>> response) {
-                Integer id = response.body().getData().get(0).getId();
-                login_text.setText(id.toString());
-            }
-
-
-            @Override
-            public void onError(String err) {
-                login_text.setText(err);
-            }
-        }); *////тестил
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

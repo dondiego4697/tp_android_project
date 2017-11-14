@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Toast;
 
 import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
@@ -27,6 +26,8 @@ public class SplashScreenActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //App.getComponent().inject(this);
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences("MyPref", 0);
         login = prefs.getString(LOGIN, "");
