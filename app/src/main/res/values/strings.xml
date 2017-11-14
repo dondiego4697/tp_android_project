@@ -29,4 +29,6 @@
     <string name="filters">Фильтры</string>
     <string name="title_category_list">Выберите категорию</string>
     <string name="all">Все</string>
+    <string name="meeting_time">Время встречи:</string>
+    <string name="place_created">Мероприятие создано:</string>
 </resources>
