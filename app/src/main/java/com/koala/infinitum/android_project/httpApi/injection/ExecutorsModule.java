@@ -12,7 +12,7 @@ import dagger.Provides;
  * Created by andrey on 12.11.17.
  */
 @Module
-public class ExecutorsModule {
+class ExecutorsModule {
 
     @Provides
     @Singleton

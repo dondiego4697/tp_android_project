@@ -2,9 +2,7 @@ package com.koala.infinitum.android_project.mainFragments.globalEvents.list;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +12,6 @@ import com.koala.infinitum.android_project.Place.PlaceInfoActivity;
 import com.koala.infinitum.android_project.R;
 import com.koala.infinitum.android_project.httpApi.models.Place;
 import com.koala.infinitum.android_project.List.OnItemClickListener;
-import com.koala.infinitum.android_project.mapSearch.MapSearchActivity;
 
 import java.util.ArrayList;
 
