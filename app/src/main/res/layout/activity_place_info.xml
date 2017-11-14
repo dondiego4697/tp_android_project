@@ -75,6 +75,7 @@
                         android:singleLine="false"
                         android:text="@string/meeting_time"
                         android:textStyle="bold"
+                        android:gravity="center_horizontal"
                         android:textSize="16dp"/>
 
                     <TextView
@@ -119,6 +120,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:singleLine="false"
+                        android:gravity="center_horizontal"
                         android:text="@string/place_created"
                         android:textSize="16dp"/>
 
