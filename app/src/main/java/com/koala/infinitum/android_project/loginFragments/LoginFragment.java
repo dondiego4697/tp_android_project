@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,18 +23,18 @@ import com.koala.infinitum.android_project.httpApi.models.ResponseOneObject;
 import com.koala.infinitum.android_project.httpApi.models.UserValidation;
 import com.koala.infinitum.android_project.httpApi.services.LoginService;
 import com.koala.infinitum.android_project.httpApi.services.UserService;
+import com.koala.infinitum.android_project.support.SharedPrefApi;
 
 public class LoginFragment extends Fragment {
-
-    private final static String LOGIN = "login";
-    private final static String PASSWD = "password";
 
     private EditText login_text;
     private EditText password_text;
     private Button login_btn;
     private ProgressBar progressBar;
 
-    SharedPreferences prefs;
+    private TextInputLayout login_text_layout;
+    private TextInputLayout password_text_layout;
+
 
     private UserService userService;
     public static ClientCallback<ResponseOneObject<UserValidation>> authHandler;//сделать singleton через фреймворк
@@ -50,6 +51,8 @@ public class LoginFragment extends Fragment {
         password_text = (EditText) view.findViewById(R.id.password);
         login_btn = (Button) view.findViewById(R.id.login_btn);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        login_text_layout = (TextInputLayout) view.findViewById(R.id.input_layout_login);
+        password_text_layout = (TextInputLayout) view.findViewById(R.id.input_layout_password);
       /*  PlaceBody placeBody= new PlaceBody();
         placeBody.setCategoryId(2);
         placeBody.setCreatorId(2);
@@ -76,6 +79,9 @@ public class LoginFragment extends Fragment {
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!submitForm()){
+                    return;
+                }
                 progressBar.setVisibility(View.VISIBLE);
 
                 stop();
@@ -85,14 +91,12 @@ public class LoginFragment extends Fragment {
                         new ClientCallback<ResponseOneObject<UserValidation>>() {
                             @Override
                             public void onSuccess(retrofit2.Response<ResponseOneObject<UserValidation>> response) {
-                                SharedPreferences.Editor editor =  getActivity().getApplicationContext().getSharedPreferences("MyPref", 0).edit();
-                                editor.putString(LOGIN, login_text.getText().toString());
-                                editor.putString(PASSWD, password_text.getText().toString());
-                                editor.apply();
+                                SharedPrefApi.setSharedUserInfo(getActivity().getApplicationContext(),
+                                        response.body().getData().getId(),
+                                        login_text.getText().toString(), password_text.getText().toString());
                                 progressBar.setVisibility(View.GONE);
                                 Intent intent = new Intent(getActivity(), MainActivity.class);
                                 intent.putExtra("token", response.body().getData().getToken());
-                                intent.putExtra(LOGIN, login_text.getText().toString());
                                 startActivity(intent);
                             }
 
@@ -117,4 +121,36 @@ public class LoginFragment extends Fragment {
     public void  stop(){
         authHandler=null;// отписываемся
     }
+
+    private Boolean submitForm(){
+        if (!validateLogin()){
+            return false;
+        } else if(!validatePassword()){
+            return false;
+        }
+
+        return true;
+    }
+
+    private Boolean validateLogin(){
+        if (login_text.getText().toString().trim().isEmpty()) {
+            login_text_layout.setError(getString(R.string.empty_login));
+            return false;
+        } else {
+            login_text_layout.setErrorEnabled(false);
+        }
+        return true;
+    }
+
+    private Boolean validatePassword(){
+        if (password_text.getText().toString().trim().isEmpty()) {
+            password_text_layout.setError(getString(R.string.empty_password));
+            return false;
+        } else {
+            password_text_layout.setErrorEnabled(false);
+        }
+        return true;
+    }
+
+
 }

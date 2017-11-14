@@ -2,24 +2,18 @@ package com.koala.infinitum.android_project;
 
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Toast;
 
 import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
 import com.koala.infinitum.android_project.httpApi.models.ResponseOneObject;
 import com.koala.infinitum.android_project.httpApi.models.UserValidation;
 import com.koala.infinitum.android_project.httpApi.services.LoginService;
+import com.koala.infinitum.android_project.support.SharedPrefApi;
 
 public class SplashScreenActivity extends AppCompatActivity {
-
-    private final static String LOGIN = "login";
-    private final static String PASSWD = "password";
-
-    //TODO: make class with constants for sharedPreferences
 
     private String login;
     private String password;
@@ -28,9 +22,8 @@ public class SplashScreenActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences prefs = getApplicationContext().getSharedPreferences("MyPref", 0);
-        login = prefs.getString(LOGIN, "");
-        password = prefs.getString(PASSWD, "");
+        login = SharedPrefApi.getSharedLogin(getApplicationContext());
+        password = SharedPrefApi.getSharedPassword(getApplicationContext());
 
         if (!login.equals("") && !password.equals("")){
             new LoginService().login(
@@ -41,7 +34,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                         public void onSuccess(retrofit2.Response<ResponseOneObject<UserValidation>> response) {
                             Intent intent = new Intent(getBaseContext(), MainActivity.class);
                             intent.putExtra("token", response.body().getData().getToken());
-                            intent.putExtra(LOGIN, login);
                             startActivity(intent);
                         }
 

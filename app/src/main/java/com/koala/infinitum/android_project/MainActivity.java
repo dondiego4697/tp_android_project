@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.koala.infinitum.android_project.mapSearch.MapSearchActivity;
+import com.koala.infinitum.android_project.support.SharedPrefApi;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -28,8 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int DRAWER_ITEM_SETTINGS = 0;
     private static final int DRAWER_ITEM_OUT = 1;
 
-    private final static String LOGIN = "login";
-    private final static String PASSWD = "password";
 
     private String currUserLogin;
 
@@ -41,8 +40,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currUserLogin = getIntent().getExtras().getString(LOGIN);
+        currUserLogin = SharedPrefApi.getSharedLogin(getApplicationContext());
         setContentView(R.layout.activity_main);
+
 //        ActionBar actionBar = getSupportActionBar();
 //        if (actionBar != null) {
 //            actionBar.setElevation(0);
@@ -84,11 +84,7 @@ public class MainActivity extends AppCompatActivity {
                                 //TODO: make settings activity
                                 break;
                             case DRAWER_ITEM_OUT:
-                                SharedPreferences prefs = getApplicationContext().getSharedPreferences("MyPref", 0);
-                                SharedPreferences.Editor editor = prefs.edit();
-                                editor.remove(LOGIN);
-                                editor.remove(PASSWD);
-                                editor.apply();
+                                SharedPrefApi.removeSharedUserInfo(getApplicationContext());
                                 Intent intent = new Intent(getBaseContext(), SplashScreenActivity.class);
                                 startActivity(intent);
                                 break;

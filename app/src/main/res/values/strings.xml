@@ -24,4 +24,9 @@
     <string name="drawer_item_settings">Настройки</string>
     <string name="drawer_item_out">Выйти</string>
     <string name="maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBnjDdycCvvAyj3GPXakbiiD7QCMa0TUF0</string>
+
+    <string name="empty_login">Введите логин</string>
+    <string name="empty_password">Введите пароль</string>
+    <string name="passwords_not_match">Пароли не совпадают</string>
+
 </resources>
