@@ -1,17 +1,26 @@
 package com.koala.infinitum.android_project.mapSearch;
 
 
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.BoringLayout;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -29,19 +38,27 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.koala.infinitum.android_project.R;
 import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
+import com.koala.infinitum.android_project.httpApi.models.Category;
 import com.koala.infinitum.android_project.httpApi.models.Place;
 import com.koala.infinitum.android_project.httpApi.models.Responses;
+import com.koala.infinitum.android_project.httpApi.services.CategoryService;
 import com.koala.infinitum.android_project.httpApi.services.PlaceService;
 import com.koala.infinitum.android_project.mainFragments.myEvents.AddPlaceFragment;
 
+import java.lang.reflect.Array;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Response;
 
 public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, GoogleMap.OnCameraIdleListener,
-        GoogleMap.OnMapClickListener{
+        GoogleMap.OnMarkerClickListener {
 
 
     GoogleMap map;
@@ -53,17 +70,23 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
     Integer DEFAULT_ZOOM = 8;
     HashMap<String, Marker> markerHashMap;
     //private FragmentTransaction transaction;
-
     public static String latitude="latitude";
     public static String longitude="longitude";
+    HashMap<String, String> categories;
+    String currCategory = "";
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_search);
-        markerHashMap = new HashMap<>();
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getCategories();
+
+        markerHashMap = new HashMap<>();
         googleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this,
                         this)
@@ -132,6 +155,25 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
 
             transaction.commit();
         }
+    private void getCategories() {
+        categories = new HashMap<>();
+        categories.put(getResources().getString(R.string.all), "");
+        new CategoryService().getCategories(new ClientCallback<Responses<Category>>() {
+            @Override
+            public void onSuccess(Response<Responses<Category>> response) {
+                ArrayList<Category> arrCategories = (ArrayList<Category>) response.body().getData();
+                for (int i = 0; i < arrCategories.size(); i++) {
+                    categories.put(arrCategories.get(i).getName(), arrCategories.get(i).getSlug());
+                }
+            }
+
+            @Override
+            public void onError(String err) {
+
+            }
+        });
+    }
+          
     private void createMapView() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -229,9 +271,18 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
 
     @Override
     public void onCameraIdle() {
-        cameraPosition = map.getCameraPosition();
+        updateCameraPosition();
+        createPlaces(getStep(), cameraPosition.target);
+    }
+
+    private Double getStep() {
         Double step = calculationByDistance(map.getProjection().getVisibleRegion().latLngBounds.northeast, cameraPosition.target);
-        createPlaces(step, cameraPosition.target);
+        step = step + step / 4;
+        return step;
+    }
+
+    public void updateCameraPosition() {
+        cameraPosition = map.getCameraPosition();
     }
 
     public double calculationByDistance(LatLng startP, LatLng endP) {
@@ -241,7 +292,7 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private void createPlaces(Double step, LatLng center) {
-        new PlaceService().getAroundPlace(center.latitude, center.longitude, 100, 0, step, "", new ClientCallback<Responses<Place>>() {
+        new PlaceService().getAroundPlace(center.latitude, center.longitude, 100, 0, step, currCategory, new ClientCallback<Responses<Place>>() {
             @Override
             public void onSuccess(Response<Responses<Place>> response) {
                 addPlaces(response.body().getData());
@@ -252,6 +303,12 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
                 Log.d("myLogs", err);
             }
         });
+    }
+
+    private void clearMap() {
+        markerHashMap.clear();
+        categories.put(getResources().getString(R.string.all), "");
+        map.clear();
     }
 
     private void addPlaces(List<Place> list) {
@@ -285,4 +342,47 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
         markerHashMap.putAll(newMarkers);
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.map_search, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_filter: {
+                if (categories.size() < 0) break;
+
+                final ArrayList<String> categoryNames = new ArrayList<>();
+                categoryNames.addAll(categories.keySet());
+
+                CharSequence[] cs = categoryNames.toArray(new CharSequence[categories.size()]);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(getResources().getString(R.string.title_category_list))
+                        .setItems(cs, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                String newCategory = categories.get(categoryNames.get(which));
+                                if (Objects.equals(currCategory, newCategory)) return;
+                                currCategory = newCategory;
+                                updateCameraPosition();
+                                clearMap();
+                                createPlaces(getStep(), cameraPosition.target);
+                            }
+                        });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                break;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        return false;
+    }
 }

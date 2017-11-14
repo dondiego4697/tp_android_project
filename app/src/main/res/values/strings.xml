@@ -33,4 +33,11 @@
     <string name="category">категория</string>
     <string name="create">create</string>
     <string name="cancel">cancel</string>
+    <string name="geocode_temp">https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBnjDdycCvvAyj3GPXakbiiD7QCMa0TUF0&amp;address=%1$s</string>
+    <string name="ok">OK</string>
+    <string name="filters">Фильтры</string>
+    <string name="title_category_list">Выберите категорию</string>
+    <string name="all">Все</string>
+    <string name="meeting_time">Время встречи:</string>
+    <string name="place_created">Мероприятие создано:</string>
 </resources>
