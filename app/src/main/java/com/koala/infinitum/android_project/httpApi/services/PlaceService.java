@@ -4,6 +4,7 @@ import com.koala.infinitum.android_project.httpApi.Api;
 import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
 import com.koala.infinitum.android_project.httpApi.models.Place;
 import com.koala.infinitum.android_project.httpApi.models.PlaceBody;
+import com.koala.infinitum.android_project.httpApi.models.PlaceDelete;
 import com.koala.infinitum.android_project.httpApi.models.ResponseOneObject;
 import com.koala.infinitum.android_project.httpApi.models.Responses;
 import com.koala.infinitum.android_project.httpApi.models.UserResponse;
@@ -84,7 +85,7 @@ public class PlaceService {
                 try {
                     Response<Responses<Place>> response =  api.createPlace(placeBody).execute();
                     if (response.body() == null) {
-                        uiThread.Fail(clientCallback,("Invalid"));
+                        uiThread.Fail(clientCallback,("Неккоректные данные"));
                     } else if (response.body().getStatusCode() != 200) {
                         uiThread.Fail(clientCallback,response.body().getErrorDescription());
                     } else {
@@ -98,7 +99,7 @@ public class PlaceService {
         return clientCallback;
     }
 
-/*    public ClientCallback<Responses<Place>> createPlace(final Integer id, final Integer userId, final ClientCallback<Responses<Place>> clientCallback){
+    public ClientCallback<Responses<Place>> deletePlace(final Integer id, final Integer userId, final ClientCallback<Responses<Place>> clientCallback){
         final UIThread<Responses<Place>> uiThread = new UIThread<>();
         executorService.execute(new Runnable() {
             @Override
@@ -118,7 +119,7 @@ public class PlaceService {
             }
         });
         return clientCallback;
-    }*/
+    }
 
     public ClientCallback<Responses<Place>> getAroundPlace(final Double lat, final Double lng, final Integer limit, final Integer offset,
                                                              final Double step, final String category, final ClientCallback<Responses<Place>> clientCallback){

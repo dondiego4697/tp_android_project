@@ -20,6 +20,7 @@ import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
 import com.koala.infinitum.android_project.httpApi.models.ResponseOneObject;
 import com.koala.infinitum.android_project.httpApi.models.UserValidation;
 import com.koala.infinitum.android_project.httpApi.services.LoginService;
+import com.koala.infinitum.android_project.mainFragments.myEvents.AddPlaceFragment;
 
 import retrofit2.Response;
 
@@ -68,6 +69,7 @@ public class RegisterFragment extends Fragment {
                             @Override
                             public void onSuccess(Response<ResponseOneObject<UserValidation>> response) {
                                 SharedPreferences.Editor editor = getActivity().getApplicationContext().getSharedPreferences("MyPref", 0).edit();
+                                AddPlaceFragment.userId=response.body().getData().getId();//hardcode
                                 editor.putString(LOGIN, login_text.getText().toString());
                                 editor.putString(PASSWD, password_text.getText().toString());
                                 editor.apply();

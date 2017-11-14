@@ -1,7 +1,6 @@
 package com.koala.infinitum.android_project.loginFragments;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -22,6 +21,7 @@ import com.koala.infinitum.android_project.httpApi.models.ResponseOneObject;
 import com.koala.infinitum.android_project.httpApi.models.UserValidation;
 import com.koala.infinitum.android_project.httpApi.services.LoginService;
 import com.koala.infinitum.android_project.httpApi.services.UserService;
+import com.koala.infinitum.android_project.mainFragments.myEvents.AddPlaceFragment;
 
 public class LoginFragment extends Fragment {
 
@@ -85,6 +85,8 @@ public class LoginFragment extends Fragment {
                         new ClientCallback<ResponseOneObject<UserValidation>>() {
                             @Override
                             public void onSuccess(retrofit2.Response<ResponseOneObject<UserValidation>> response) {
+                                UserValidation userValidation = response.body().getData();
+                                AddPlaceFragment.userId=userValidation.getId(); //hardcode
                                 SharedPreferences.Editor editor =  getActivity().getApplicationContext().getSharedPreferences("MyPref", 0).edit();
                                 editor.putString(LOGIN, login_text.getText().toString());
                                 editor.putString(PASSWD, password_text.getText().toString());

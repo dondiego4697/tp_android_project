@@ -20,4 +20,10 @@ public class Category {
     @SerializedName("name")
     @Expose
     private String name;
+
+    public String getSlug(){return slug;}
+
+    public String getName(){return name;}
+
+    public Integer getId(){return id;}
 }
