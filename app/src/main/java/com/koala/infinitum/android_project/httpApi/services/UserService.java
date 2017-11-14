@@ -2,6 +2,7 @@ package com.koala.infinitum.android_project.httpApi.services;
 
 import com.koala.infinitum.android_project.httpApi.Api;
 import com.koala.infinitum.android_project.httpApi.ApiSingletone;
+import com.koala.infinitum.android_project.httpApi.ExecutorSingletone;
 import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
 import com.koala.infinitum.android_project.httpApi.models.Place;
 import com.koala.infinitum.android_project.httpApi.models.Responses;
@@ -22,7 +23,7 @@ public class UserService {
 
 
 
-    private ExecutorService executorService= Executors.newSingleThreadExecutor();
+    private ExecutorService executorService= ExecutorSingletone.getInstance();
 
     public Api api= ApiSingletone.getInstance();
 

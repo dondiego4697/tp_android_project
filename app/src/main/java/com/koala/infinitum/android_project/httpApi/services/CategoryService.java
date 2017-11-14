@@ -2,6 +2,7 @@ package com.koala.infinitum.android_project.httpApi.services;
 
 import com.koala.infinitum.android_project.httpApi.Api;
 import com.koala.infinitum.android_project.httpApi.ApiSingletone;
+import com.koala.infinitum.android_project.httpApi.ExecutorSingletone;
 import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
 import com.koala.infinitum.android_project.httpApi.models.Category;
 import com.koala.infinitum.android_project.httpApi.models.Responses;
@@ -18,7 +19,8 @@ import retrofit2.Response;
 
 public class CategoryService {
 
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+    private ExecutorService executorService= ExecutorSingletone.getInstance();
 
     private Api api = ApiSingletone.getInstance();
 
