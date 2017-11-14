@@ -1,9 +1,7 @@
 package com.koala.infinitum.android_project.loginFragments;
 
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -22,21 +20,18 @@ import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
 import com.koala.infinitum.android_project.httpApi.models.ResponseOneObject;
 import com.koala.infinitum.android_project.httpApi.models.UserValidation;
 import com.koala.infinitum.android_project.httpApi.services.LoginService;
-import com.koala.infinitum.android_project.httpApi.services.UserService;
 import com.koala.infinitum.android_project.support.SharedPrefApi;
 
 public class LoginFragment extends Fragment {
 
     private EditText login_text;
     private EditText password_text;
-    private Button login_btn;
     private ProgressBar progressBar;
 
     private TextInputLayout login_text_layout;
     private TextInputLayout password_text_layout;
 
 
-    private UserService userService;
     public static ClientCallback<ResponseOneObject<UserValidation>> authHandler;//сделать singleton через фреймворк
 
     @Nullable
@@ -49,7 +44,7 @@ public class LoginFragment extends Fragment {
 
         login_text = (EditText) view.findViewById(R.id.login);
         password_text = (EditText) view.findViewById(R.id.password);
-        login_btn = (Button) view.findViewById(R.id.login_btn);
+        Button login_btn = (Button) view.findViewById(R.id.login_btn);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         login_text_layout = (TextInputLayout) view.findViewById(R.id.input_layout_login);
         password_text_layout = (TextInputLayout) view.findViewById(R.id.input_layout_password);
