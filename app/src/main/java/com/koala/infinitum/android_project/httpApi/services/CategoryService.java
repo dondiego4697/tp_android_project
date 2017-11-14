@@ -18,30 +18,32 @@ import retrofit2.Response;
 
 public class CategoryService {
 
-    private ExecutorService executorService= Executors.newSingleThreadExecutor();
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    private Api api= ApiSingletone.getInstance();
+    private Api api = ApiSingletone.getInstance();
 
     //мало ли надо будет отписаться
-    public ClientCallback<Responses<Category>> getCategories(final ClientCallback<Responses<Category>> clientCallback){
-        final UIThread<Responses<Category>> UIThread= new UIThread<>();
+    public ClientCallback<Responses<Category>> getCategories(final ClientCallback<Responses<Category>> clientCallback) {
+        final UIThread<Responses<Category>> UIThread = new UIThread<>();
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                try{
-                    Response<Responses<Category>> response=api.getCategories().execute();
+                try {
+                    Response<Responses<Category>> response = api.getCategories().execute();
                     if (response.body() == null) {
-                        UIThread.Fail(clientCallback,"empty response");
+                        UIThread.Fail(clientCallback, "empty response");
                     } else if (response.body().getStatusCode() != 200) {
-                        UIThread.Fail(clientCallback,response.body().getErrorDescription());
+                        UIThread.Fail(clientCallback, response.body().getErrorDescription());
                     } else {
-                        UIThread.Success(clientCallback,response);
+                        UIThread.Success(clientCallback, response);
                     }
-                }catch (IOException e){
-                    UIThread.Fail(clientCallback,String.valueOf(e));
+                } catch (IOException e) {
+                    UIThread.Fail(clientCallback, String.valueOf(e));
                 }
             }
         });
+        return clientCallback;
     }
+
 
 }

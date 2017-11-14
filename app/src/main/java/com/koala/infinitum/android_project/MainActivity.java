@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.koala.infinitum.android_project.Singletones.SingletonCategory;
 import com.koala.infinitum.android_project.mapSearch.MapSearchActivity;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;

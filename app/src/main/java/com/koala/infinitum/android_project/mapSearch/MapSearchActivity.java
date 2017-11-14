@@ -1,15 +1,12 @@
 package com.koala.infinitum.android_project.mapSearch;
 
 
-import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -17,7 +14,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.BoringLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,11 +41,7 @@ import com.koala.infinitum.android_project.httpApi.services.CategoryService;
 import com.koala.infinitum.android_project.httpApi.services.PlaceService;
 import com.koala.infinitum.android_project.mainFragments.myEvents.AddPlaceFragment;
 
-import java.lang.reflect.Array;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -58,7 +50,7 @@ import retrofit2.Response;
 
 public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, GoogleMap.OnCameraIdleListener,
-        GoogleMap.OnMarkerClickListener {
+        GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener{
 
 
     GoogleMap map;
