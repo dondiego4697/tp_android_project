@@ -56,7 +56,8 @@ import java.util.Objects;
 import retrofit2.Response;
 
 public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCallback,
-        GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, GoogleMap.OnCameraIdleListener {
+        GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, GoogleMap.OnCameraIdleListener,
+        GoogleMap.OnMarkerClickListener {
 
     GoogleMap map;
     Boolean locationPermissionGranted = false;
@@ -311,5 +312,11 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        return false;
     }
 }
