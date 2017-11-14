@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by andrey on 14.11.17.
  */
 
-public class ApiSingletone {
+public class AdiSingleton {
 
     private static Api instance;
 

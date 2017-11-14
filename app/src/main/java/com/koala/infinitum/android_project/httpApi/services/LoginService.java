@@ -4,7 +4,7 @@ package com.koala.infinitum.android_project.httpApi.services;
 import android.content.Context;
 
 import com.koala.infinitum.android_project.httpApi.Api;
-import com.koala.infinitum.android_project.httpApi.ApiSingletone;
+import com.koala.infinitum.android_project.httpApi.AdiSingleton;
 import com.koala.infinitum.android_project.httpApi.ExecutorSingletone;
 import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
 import com.koala.infinitum.android_project.httpApi.models.ResponseOneObject;
@@ -20,7 +20,7 @@ public class LoginService {
 
     private ExecutorService executorService= ExecutorSingletone.getInstance();
 
-    private Api api= ApiSingletone.getInstance();
+    private Api api= AdiSingleton.getInstance();
 
 
 

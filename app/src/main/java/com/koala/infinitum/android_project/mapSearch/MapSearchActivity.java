@@ -5,11 +5,11 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -26,22 +26,23 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.koala.infinitum.android_project.R;
+import com.koala.infinitum.android_project.Singletons.CategorySingleton;
 import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
-import com.koala.infinitum.android_project.httpApi.models.Category;
 import com.koala.infinitum.android_project.httpApi.models.Place;
 import com.koala.infinitum.android_project.httpApi.models.Responses;
-import com.koala.infinitum.android_project.httpApi.services.CategoryService;
 import com.koala.infinitum.android_project.httpApi.services.PlaceService;
-import com.koala.infinitum.android_project.mainFragments.myEvents.AddPlaceFragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -50,225 +51,124 @@ import retrofit2.Response;
 
 public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, GoogleMap.OnCameraIdleListener,
-        GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener{
+        GoogleMap.OnMapClickListener, View.OnClickListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnMarkerDragListener{
 
+    private GoogleMap map;
+    private GoogleApiClient googleApiClient;
+    private CameraPosition cameraPosition;
 
-    GoogleMap map;
+    HashMap<String, Marker> markersHashMap;
+    HashMap<String, String> categories;
+
     Boolean locationPermissionGranted = false;
     final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     Location lastKnownLocation;
-    private GoogleApiClient googleApiClient;
-    CameraPosition cameraPosition;
+
     Integer DEFAULT_ZOOM = 8;
-    HashMap<String, Marker> markerHashMap;
-    //private FragmentTransaction transaction;
-    public static String latitude="latitude";
-    public static String longitude="longitude";
-    HashMap<String, String> categories;
-    String currCategory = "";
+    String NEW_MARKER = "marker";
+    String currentCategory = null;
+
+    FloatingActionButton fabAddPlace;
+    Marker newPlaceMarker = null;
+    double[] newPlaceMarkerPoint = null;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_search);
+        getCategories();
+        markersHashMap = new HashMap<>();
+        clearMap();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getCategories();
+        fabAddPlace = (FloatingActionButton) findViewById(R.id.fabAddPlace);
+        fabAddPlace.setOnClickListener(this);
 
-        markerHashMap = new HashMap<>();
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this,
-                        this)
-                .addConnectionCallbacks(this)
-                .addApi(LocationServices.API)
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .build();
-        googleApiClient.connect();
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .enableAutoManage(this,
+                            this)
+                    .addConnectionCallbacks(this)
+                    .addApi(LocationServices.API)
+                    .addApi(Places.GEO_DATA_API)
+                    .addApi(Places.PLACE_DETECTION_API)
+                    .build();
+            googleApiClient.connect();
+        }
+    }
+
+    private void setVisibilityFabAddPlace(Boolean state) {
+        fabAddPlace.setVisibility(state ? View.VISIBLE : View.GONE);
+    }
+
+    private void setMapInContainer() {
+        MapFragment mapFragment = MapFragment.newInstance();
+        android.app.FragmentManager fragmentManager = getFragmentManager();
+        android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.add(R.id.container, mapFragment);
+        transaction.commit();
+        mapFragment.getMapAsync(this);
+    }
+
+    //TODO АНДРЕЙ ВОТ В ТАКИХ ФУНКЦИЯ МЕНЯЙ
+    private void setSMTHINCONTAINER() {
+
     }
 
     @Override
-    public void onMapClick(LatLng point) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        Bundle bundle = new Bundle();
-        bundle.putDouble(latitude, point.latitude);//hardcode, исправить
-        bundle.putDouble(longitude, point.longitude);
-        AddPlaceFragment fragment = new AddPlaceFragment();
-        fragment.setArguments(bundle);
-        transaction.replace(R.id.fragment_container, fragment);
-   //     transaction.addToBackStack(null);
-        transaction.commit();
-        removeFragmentMap();
+    public void onConnected(@Nullable Bundle bundle) {
+        setMapInContainer();
     }
 
-    private void removeFragmentMap(){
-       // SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        map.getUiSettings().setScrollGesturesEnabled(false);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        View view =mapFragment.getView();
-        if(view!=null) view.setVisibility(View.INVISIBLE);
-       // mapFragment.getView().setVisibility(View.INVISIBLE);
-
-        //map.stopAnimation();
-       // map.setMyLocationEnabled(true);
-        //mapFragment.onDestroyView();
-     /*   FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-        RedFragment red = (RedFragment) fragmentManager.findFragmentById(R.id.red_container);
-        GreenFragment green = (GreenFragment) fragmentManager.findFragmentById(R.id.green_container);
-        BlueFragment blue = (BlueFragment) fragmentManager.findFragmentById(R.id.blue_container);
-
-        if (blue != null && blue.isAdded()) {
-            transaction.remove(blue);*/
-
-        }
-
-        public void showFragmentMap(){
-            map.getUiSettings().setScrollGesturesEnabled(true);
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-            View view =mapFragment.getView();
-            if(view!=null) view.setVisibility(View.VISIBLE);
-            removeFragmentAddPlace();
-            onCameraIdle();
-        }
-
-        private void removeFragmentAddPlace(){
-
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-            AddPlaceFragment fragment = (AddPlaceFragment) fragmentManager.findFragmentById(R.id.fragment_container);
-            transaction.remove(fragment);
-
-            transaction.commit();
-        }
-    private void getCategories() {
-        categories = new HashMap<>();
-        categories.put(getResources().getString(R.string.all), "");
-        new CategoryService().getCategories(new ClientCallback<Responses<Category>>() {
-            @Override
-            public void onSuccess(Response<Responses<Category>> response) {
-                ArrayList<Category> arrCategories = (ArrayList<Category>) response.body().getData();
-                for (int i = 0; i < arrCategories.size(); i++) {
-                    categories.put(arrCategories.get(i).getName(), arrCategories.get(i).getSlug());
-                }
-            }
-
-            @Override
-            public void onError(String err) {
-
-            }
-        });
+    @Override
+    public void onConnectionSuspended(int i) {
+        setMapInContainer();
     }
-          
-    private void createMapView() {
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
+
+    @Override
+    public void onCameraIdle() {
+        updateCameraPosition();
+        getPlacesInArea(getStep(), cameraPosition.target);
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        if (newPlaceMarker != null) {
+            newPlaceMarker.remove();
+        }
+        newPlaceMarker = map.addMarker(new MarkerOptions().position(latLng).draggable(true).title(getString(R.string.dot_new_place)));
+        newPlaceMarkerPoint = new double[]{latLng.latitude, latLng.longitude};
+        setVisibilityFabAddPlace(true);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
 
-        Log.d("myLogs", "onMapReady");
         getDeviceLocation();
         setMapUI();
 
         map.setOnCameraIdleListener(this);
         map.setOnMapClickListener(this);
-        Toast.makeText(this, "кликните, чтобы создать событие", Toast.LENGTH_LONG).show();//hardcode
-    }
 
-    private void setMapUI() {
-        try {
-            if (locationPermissionGranted) {
-                map.setMyLocationEnabled(true);
-                map.getUiSettings().setMyLocationButtonEnabled(true);
-            } else {
-                map.setMyLocationEnabled(false);
-                map.getUiSettings().setMyLocationButtonEnabled(false);
-                lastKnownLocation = null;
-            }
-        } catch (SecurityException e)  {
-            Log.e("Exception: %s", e.getMessage());
-        }
-
-        map.getUiSettings().setZoomControlsEnabled(true);
-        map.getUiSettings().setMapToolbarEnabled(true);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        locationPermissionGranted = false;
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    locationPermissionGranted = true;
-                }
-            }
-        }
-        setMapUI();
-    }
-
-    private void getDeviceLocation() {
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            locationPermissionGranted = true;
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
-
-        if (locationPermissionGranted) {
-            lastKnownLocation = LocationServices.FusedLocationApi
-                    .getLastLocation(googleApiClient);
-        }
-
-        // Set the map's camera position to the current location of the device.
-        if (cameraPosition != null) {
-            map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        } else if (lastKnownLocation != null) {
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                    new LatLng(lastKnownLocation.getLatitude(),
-                            lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-        }
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d("myLogs", "onConnectionFailed");
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        Log.d("myLogs", "onConnectionSuspended");
-        createMapView();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.d("myLogs", "onConnectionSuspended");
-        createMapView();
-    }
-
-    @Override
-    public void onCameraIdle() {
         updateCameraPosition();
-        createPlaces(getStep(), cameraPosition.target);
+        map.setOnMarkerClickListener(this);
+        getPlacesInArea(getStep(), cameraPosition.target);
+
+        setVisibilityFabAddPlace(false);
+        if (newPlaceMarkerPoint != null) {
+            onMapClick(new LatLng(newPlaceMarkerPoint[0], newPlaceMarkerPoint[1]));
+        }
     }
 
-    private Double getStep() {
-        Double step = calculationByDistance(map.getProjection().getVisibleRegion().latLngBounds.northeast, cameraPosition.target);
+    private double getStep() {
+        double step = calculationByDistance(map.getProjection().getVisibleRegion().latLngBounds.northeast, cameraPosition.target);
         step = step + step / 4;
         return step;
     }
@@ -283,27 +183,30 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
         return results[0];
     }
 
-    private void createPlaces(Double step, LatLng center) {
-        new PlaceService().getAroundPlace(center.latitude, center.longitude, 100, 0, step, currCategory, new ClientCallback<Responses<Place>>() {
-            @Override
-            public void onSuccess(Response<Responses<Place>> response) {
-                addPlaces(response.body().getData());
-            }
-
-            @Override
-            public void onError(String err) {
-                Log.d("myLogs", err);
-            }
-        });
-    }
-
     private void clearMap() {
-        markerHashMap.clear();
-        categories.put(getResources().getString(R.string.all), "");
-        map.clear();
+        for(Marker marker : markersHashMap.values()) {
+            marker.remove();
+        }
+        markersHashMap.clear();
+        categories.put(getResources().getString(R.string.all), null);
     }
 
-    private void addPlaces(List<Place> list) {
+    private void getPlacesInArea(Double step, LatLng center) {
+        ClientCallback<Responses<Place>> callback = new PlaceService().getAroundPlace(center.latitude, center.longitude, 100, 0, step, currentCategory,
+                new ClientCallback<Responses<Place>>() {
+                    @Override
+                    public void onSuccess(Response<Responses<Place>> response) {
+                        updatePlacesOnMap(response.body().getData());
+                    }
+
+                    @Override
+                    public void onError(String err) {
+                        Log.d("myLogs", err);
+                    }
+                });
+    }
+
+    private void updatePlacesOnMap(List<Place> list) {
         HashMap<String, Marker> newMarkers = new HashMap<>();
 
         for (int i = 0; i < list.size(); i++) {
@@ -312,28 +215,75 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
             String mKey = place.getId() + "" + point.get(0) + "" + point.get(1);
 
             Marker marker;
-            Marker currMarker = markerHashMap.get(mKey);
+            Marker currMarker = markersHashMap.get(mKey);
             if (currMarker == null) {
                 marker = map.addMarker(new MarkerOptions()
                         .position(new LatLng(point.get(0), point.get(1)))
-                        .title(place.getTitle()));
-
+                        .title(place.getTitle())
+                        .draggable(false)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                marker.setTag(place);
             } else {
                 marker = currMarker;
             }
             newMarkers.put(mKey, marker);
         }
 
-        for (String key : markerHashMap.keySet()) {
+        for (String key : markersHashMap.keySet()) {
             if (newMarkers.get(key) == null) {
-                markerHashMap.get(key).remove();
+                markersHashMap.get(key).remove();
             }
         }
 
-        markerHashMap.clear();
-        markerHashMap.putAll(newMarkers);
+        markersHashMap.clear();
+        markersHashMap.putAll(newMarkers);
     }
 
+    private void setMapUI() {
+        try {
+            if (locationPermissionGranted) {
+                map.setMyLocationEnabled(true);
+                map.getUiSettings().setMyLocationButtonEnabled(true);
+            } else {
+                map.setMyLocationEnabled(false);
+                map.getUiSettings().setMyLocationButtonEnabled(false);
+                lastKnownLocation = null;
+            }
+        } catch (SecurityException e) {
+            Log.e("Exception: %s", e.getMessage());
+        }
+
+        map.getUiSettings().setZoomControlsEnabled(true);
+        map.getUiSettings().setMapToolbarEnabled(true);
+    }
+
+    private void getDeviceLocation() {
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationPermissionGranted = true;
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+
+        if (locationPermissionGranted) {
+            lastKnownLocation = LocationServices.FusedLocationApi
+                    .getLastLocation(googleApiClient);
+        }
+
+        if (cameraPosition != null) {
+            map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        } else if (lastKnownLocation != null) {
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(lastKnownLocation.getLatitude(),
+                            lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+        }
+    }
+
+    private void getCategories() {
+        categories = CategorySingleton.getInstance().getCategories();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -349,7 +299,6 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
 
                 final ArrayList<String> categoryNames = new ArrayList<>();
                 categoryNames.addAll(categories.keySet());
-
                 CharSequence[] cs = categoryNames.toArray(new CharSequence[categories.size()]);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -357,11 +306,11 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
                         .setItems(cs, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 String newCategory = categories.get(categoryNames.get(which));
-                                if (Objects.equals(currCategory, newCategory)) return;
-                                currCategory = newCategory;
+                                if (Objects.equals(currentCategory, newCategory)) return;
+                                currentCategory = newCategory;
                                 updateCameraPosition();
                                 clearMap();
-                                createPlaces(getStep(), cameraPosition.target);
+                                getPlacesInArea(getStep(), cameraPosition.target);
                             }
                         });
                 AlertDialog dialog = builder.create();
@@ -373,8 +322,52 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     @Override
-    public boolean onMarkerClick(Marker marker) {
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.fabAddPlace: {
+                //TODO Андрей, здесь можно вызвать функцию для вставки фрагмента
+                break;
+            }
+        }
+    }
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        Place place = (Place) marker.getTag();
+        if (place != null) {
+            //Toast.makeText(this, "open Place", Toast.LENGTH_SHORT).show();
+        }
         return false;
+    }
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }

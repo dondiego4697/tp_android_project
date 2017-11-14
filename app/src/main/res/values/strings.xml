@@ -25,7 +25,7 @@
 
     <string name="drawer_item_settings">Настройки</string>
     <string name="drawer_item_out">Выйти</string>
-    <string name="maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBnjDdycCvvAyj3GPXakbiiD7QCMa0TUF0</string>
+    <string name="maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDKmzqwHwZxMWiW_B0oNwCL2s3Lg3Od_eA</string>
     <string name="add_place">Add place</string>
     <string name="addPlace_title">Создание события</string>
     <string name="tittle_addPlace_Placeholder">Заголовок</string>
@@ -33,11 +33,12 @@
     <string name="category">категория</string>
     <string name="create">create</string>
     <string name="cancel">cancel</string>
-    <string name="geocode_temp">https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBnjDdycCvvAyj3GPXakbiiD7QCMa0TUF0&amp;address=%1$s</string>
+    <string name="geocode_temp">https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDKmzqwHwZxMWiW_B0oNwCL2s3Lg3Od_eA&amp;address=%1$s</string>
     <string name="ok">OK</string>
     <string name="filters">Фильтры</string>
     <string name="title_category_list">Выберите категорию</string>
     <string name="all">Все</string>
     <string name="meeting_time">Время встречи:</string>
     <string name="place_created">Мероприятие создано:</string>
+    <string name="dot_new_place">Новое место?</string>
 </resources>

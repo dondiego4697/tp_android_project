@@ -1,7 +1,7 @@
 package com.koala.infinitum.android_project.httpApi.services;
 
 import com.koala.infinitum.android_project.httpApi.Api;
-import com.koala.infinitum.android_project.httpApi.ApiSingletone;
+import com.koala.infinitum.android_project.httpApi.AdiSingleton;
 import com.koala.infinitum.android_project.httpApi.ExecutorSingletone;
 import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
 import com.koala.infinitum.android_project.httpApi.models.Place;
@@ -10,7 +10,6 @@ import com.koala.infinitum.android_project.httpApi.models.UserResponse;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import retrofit2.Response;
 
@@ -25,7 +24,7 @@ public class UserService {
 
     private ExecutorService executorService= ExecutorSingletone.getInstance();
 
-    public Api api= ApiSingletone.getInstance();
+    public Api api= AdiSingleton.getInstance();
 
 
     public ClientCallback<Responses<UserResponse>> get(final Integer id, final ClientCallback<Responses<UserResponse>> clientCallback){

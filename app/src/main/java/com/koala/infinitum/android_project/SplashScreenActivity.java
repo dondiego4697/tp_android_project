@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.koala.infinitum.android_project.Singletons.CategorySingleton;
 import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
 import com.koala.infinitum.android_project.httpApi.models.ResponseOneObject;
 import com.koala.infinitum.android_project.httpApi.models.UserValidation;
@@ -28,7 +29,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //App.getComponent().inject(this);
-
+        CategorySingleton.getInstance(); //TODO достаем и сохраняем список категорий
         SharedPreferences prefs = getApplicationContext().getSharedPreferences("MyPref", 0);
         login = prefs.getString(LOGIN, "");
         password = prefs.getString(PASSWD, "");

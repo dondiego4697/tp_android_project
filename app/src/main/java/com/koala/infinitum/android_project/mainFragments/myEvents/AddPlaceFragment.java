@@ -28,10 +28,6 @@ import java.util.List;
 
 import retrofit2.Response;
 
-/**
- * Created by andrey on 14.11.17.
- */
-
 public class AddPlaceFragment extends Fragment {
 
 
@@ -49,7 +45,7 @@ public class AddPlaceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_addplace, container, false);
-        title = (EditText) view.findViewById(R.id.tittle);
+        /*title = (EditText) view.findViewById(R.id.tittle);
         category = (EditText) view.findViewById(R.id.category);
         description = (EditText) view.findViewById(R.id.description);
         create_btn = (Button) view.findViewById(R.id.create_btn);
@@ -133,7 +129,7 @@ public class AddPlaceFragment extends Fragment {
             public void onClick(View v) {
                 ((MapSearchActivity) getActivity()).showFragmentMap();
             }
-        });
+        });*/
 
         return view;
     }
