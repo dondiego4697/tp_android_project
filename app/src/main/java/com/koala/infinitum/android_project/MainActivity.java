@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 //            actionBar.setElevation(0);
 //        }
         /*component = */
-       // App.getComponent().inject(this);
+      //  App.getComponent().inject(this);
 
         // Handle Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

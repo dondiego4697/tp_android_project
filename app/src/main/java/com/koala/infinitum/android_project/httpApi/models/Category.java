@@ -21,11 +21,9 @@ public class Category {
     @Expose
     private String name;
 
-    public String getName() {
-        return name;
-    }
+    public String getSlug(){return slug;}
 
-    public String getSlug() {
-        return slug;
-    }
+    public String getName(){return name;}
+
+    public Integer getId(){return id;}
 }

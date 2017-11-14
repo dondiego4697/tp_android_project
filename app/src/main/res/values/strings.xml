@@ -11,6 +11,8 @@
     <string name="place_item__time_start">Время встречи: %1$s</string>
     <string name="place_item__time_created">Создано: %1$s</string>
 
+    <string name="latitude">latitude</string>
+    <string name="longitude">longitude</string>
     <string name="login_title">Вход</string>
     <string name="register_title">Регистрация</string>
     <string name="login_placeholder">Логин</string>
@@ -24,6 +26,13 @@
     <string name="drawer_item_settings">Настройки</string>
     <string name="drawer_item_out">Выйти</string>
     <string name="maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBnjDdycCvvAyj3GPXakbiiD7QCMa0TUF0</string>
+    <string name="add_place">Add place</string>
+    <string name="addPlace_title">Создание события</string>
+    <string name="tittle_addPlace_Placeholder">Заголовок</string>
+    <string name="description_addPlace_Placeholder">Описание</string>
+    <string name="category">категория</string>
+    <string name="create">create</string>
+    <string name="cancel">cancel</string>
     <string name="geocode_temp">https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBnjDdycCvvAyj3GPXakbiiD7QCMa0TUF0&amp;address=%1$s</string>
     <string name="ok">OK</string>
     <string name="filters">Фильтры</string>

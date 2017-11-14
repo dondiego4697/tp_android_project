@@ -5,13 +5,14 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -35,7 +36,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.koala.infinitum.android_project.R;
 import com.koala.infinitum.android_project.httpApi.interfaces.ClientCallback;
 import com.koala.infinitum.android_project.httpApi.models.Category;
@@ -43,6 +43,7 @@ import com.koala.infinitum.android_project.httpApi.models.Place;
 import com.koala.infinitum.android_project.httpApi.models.Responses;
 import com.koala.infinitum.android_project.httpApi.services.CategoryService;
 import com.koala.infinitum.android_project.httpApi.services.PlaceService;
+import com.koala.infinitum.android_project.mainFragments.myEvents.AddPlaceFragment;
 
 import java.lang.reflect.Array;
 import java.text.DecimalFormat;
@@ -59,6 +60,7 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
         GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, GoogleMap.OnCameraIdleListener,
         GoogleMap.OnMarkerClickListener {
 
+
     GoogleMap map;
     Boolean locationPermissionGranted = false;
     final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
@@ -67,8 +69,12 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
     CameraPosition cameraPosition;
     Integer DEFAULT_ZOOM = 8;
     HashMap<String, Marker> markerHashMap;
+    //private FragmentTransaction transaction;
+    public static String latitude="latitude";
+    public static String longitude="longitude";
     HashMap<String, String> categories;
     String currCategory = "";
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,6 +98,63 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
         googleApiClient.connect();
     }
 
+    @Override
+    public void onMapClick(LatLng point) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        Bundle bundle = new Bundle();
+        bundle.putDouble(latitude, point.latitude);//hardcode, исправить
+        bundle.putDouble(longitude, point.longitude);
+        AddPlaceFragment fragment = new AddPlaceFragment();
+        fragment.setArguments(bundle);
+        transaction.replace(R.id.fragment_container, fragment);
+   //     transaction.addToBackStack(null);
+        transaction.commit();
+        removeFragmentMap();
+    }
+
+    private void removeFragmentMap(){
+       // SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        map.getUiSettings().setScrollGesturesEnabled(false);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        View view =mapFragment.getView();
+        if(view!=null) view.setVisibility(View.INVISIBLE);
+       // mapFragment.getView().setVisibility(View.INVISIBLE);
+
+        //map.stopAnimation();
+       // map.setMyLocationEnabled(true);
+        //mapFragment.onDestroyView();
+     /*   FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        RedFragment red = (RedFragment) fragmentManager.findFragmentById(R.id.red_container);
+        GreenFragment green = (GreenFragment) fragmentManager.findFragmentById(R.id.green_container);
+        BlueFragment blue = (BlueFragment) fragmentManager.findFragmentById(R.id.blue_container);
+
+        if (blue != null && blue.isAdded()) {
+            transaction.remove(blue);*/
+
+        }
+
+        public void showFragmentMap(){
+            map.getUiSettings().setScrollGesturesEnabled(true);
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+            View view =mapFragment.getView();
+            if(view!=null) view.setVisibility(View.VISIBLE);
+            removeFragmentAddPlace();
+            onCameraIdle();
+        }
+
+        private void removeFragmentAddPlace(){
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+            AddPlaceFragment fragment = (AddPlaceFragment) fragmentManager.findFragmentById(R.id.fragment_container);
+            transaction.remove(fragment);
+
+            transaction.commit();
+        }
     private void getCategories() {
         categories = new HashMap<>();
         categories.put(getResources().getString(R.string.all), "");
@@ -110,7 +173,7 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
             }
         });
     }
-
+          
     private void createMapView() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -125,6 +188,8 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
         setMapUI();
 
         map.setOnCameraIdleListener(this);
+        map.setOnMapClickListener(this);
+        Toast.makeText(this, "кликните, чтобы создать событие", Toast.LENGTH_LONG).show();//hardcode
     }
 
     private void setMapUI() {
@@ -276,6 +341,7 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
         markerHashMap.clear();
         markerHashMap.putAll(newMarkers);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
